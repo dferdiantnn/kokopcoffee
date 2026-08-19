@@ -6,14 +6,18 @@
   <title>KOKOP COFFEE - Bensin Buat Lo yang Belum Resign 💼</title>
   <meta name="description" content="Sepahit-pahitnya kerjaan dan deadline, tetep butuh yang seger-seger. Kopi dan racikan teh andalan dari kokopcoffee siap nge-reboot semangat lo hari ini. #masihbutuhduit" />
 
-  <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk & Outfit -->
+  <!-- Google Fonts: Outfit, Plus Jakarta Sans & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons & Tailwind Play CDN -->
+  <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- GSAP & ScrollTrigger for Next-Level Framer Motion Style Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
@@ -29,9 +33,10 @@
               orange: '#FF7300',
               orangeHover: '#E06200',
               dark: '#121212',
-              cardDark: '#1A1A1A',
-              muted: '#666666',
-              tag: '#2A2A2A'
+              cardDark: '#1C1C1E',
+              borderDark: '#2C2C2E',
+              muted: '#8E8E93',
+              tag: '#262628'
             }
           },
           fontFamily: {
@@ -41,30 +46,25 @@
           },
           boxShadow: {
             'brutal': '4px 4px 0px 0px #121212',
+            'brutal-sm': '2.5px 2.5px 0px 0px #121212',
             'brutal-orange': '4px 4px 0px 0px #FF7300',
             'brutal-yellow': '4px 4px 0px 0px #FFD100',
-            'glow-yellow': '0 0 25px rgba(255, 209, 0, 0.45)',
-            'glow-orange': '0 0 25px rgba(255, 115, 0, 0.5)'
+            'glow-yellow': '0 0 30px rgba(255, 209, 0, 0.4)',
+            'glow-orange': '0 0 30px rgba(255, 115, 0, 0.45)'
           },
           keyframes: {
             marquee: {
               '0%': { transform: 'translateX(0%)' },
               '100%': { transform: 'translateX(-50%)' }
             },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-              '50%': { transform: 'translateY(-8px) rotate(1.5deg)' }
-            },
-            pulseSlow: {
-              '0%, 100%': { transform: 'scale(1)', opacity: '1' },
-              '50%': { transform: 'scale(1.03)', opacity: '0.92' }
+            badgePulse: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.05)' }
             }
           },
           animation: {
-            'marquee': 'marquee 18s linear infinite',
-            'marquee-slow': 'marquee 25s linear infinite',
-            'float': 'float 4s ease-in-out infinite',
-            'pulse-slow': 'pulseSlow 3s ease-in-out infinite'
+            'marquee': 'marquee 16s linear infinite',
+            'badge-pulse': 'badgePulse 2s ease-in-out infinite'
           }
         }
       }
@@ -72,122 +72,99 @@
   </script>
 
   <style>
-    /* Custom utility & micro-animations */
     body {
-      background-color: #121212;
+      background-color: #0F0F10;
       color: #121212;
       font-family: 'Plus Jakarta Sans', sans-serif;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Container shipping ribbed steel visual effect */
+    /* Container shipping ribbed texture */
     .shipping-container-texture {
       background: repeating-linear-gradient(
         90deg,
-        rgba(0, 0, 0, 0.05) 0px,
-        rgba(0, 0, 0, 0.05) 16px,
-        rgba(255, 255, 255, 0.12) 16px,
-        rgba(255, 255, 255, 0.12) 20px,
-        rgba(0, 0, 0, 0.1) 20px,
-        rgba(0, 0, 0, 0.1) 36px
+        rgba(0, 0, 0, 0.06) 0px,
+        rgba(0, 0, 0, 0.06) 14px,
+        rgba(255, 255, 255, 0.14) 14px,
+        rgba(255, 255, 255, 0.14) 18px,
+        rgba(0, 0, 0, 0.08) 18px,
+        rgba(0, 0, 0, 0.08) 32px
       );
-    }
-
-    /* Stagger reveal animation helper classes (Framer-motion style scroll triggers) */
-    .reveal-on-scroll {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal-on-scroll.is-visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     /* Sticker badge styling */
     .sticker-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.375rem;
-      border: 2px solid #121212;
+      gap: 0.3rem;
+      border: 1.5px solid #121212;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: -0.01em;
       box-shadow: 2px 2px 0px #121212;
     }
 
-    /* Custom button active state */
-    .btn-bouncy {
-      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    /* Springy Button Effects */
+    .btn-spring {
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
-    .btn-bouncy:hover {
-      transform: translateY(-2px) scale(1.01);
+    .btn-spring:hover {
+      transform: translateY(-3px) scale(1.015);
     }
-    .btn-bouncy:active {
+    .btn-spring:active {
       transform: translateY(2px) scale(0.97);
       box-shadow: 1px 1px 0px #121212 !important;
     }
 
-    /* Modal Backdrop Blur */
+    /* GSAP Animated Elements initial visibility */
+    .gsap-reveal {
+      will-change: transform, opacity;
+    }
+
+    /* Modal Backdrop */
     .modal-active {
       overflow: hidden;
     }
 
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
-      width: 7px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
       background: #121212;
     }
     ::-webkit-scrollbar-thumb {
       background: #FFD100;
-      border-radius: 4px;
+      border-radius: 3px;
     }
   </style>
 </head>
-<body class="bg-[#121212] text-[#121212] antialiased selection:bg-[#FF7300] selection:text-white">
+<body class="bg-[#0F0F10] text-[#121212] antialiased selection:bg-[#FF7300] selection:text-white">
 
   <!-- TOP RUNNING TICKER / MARQUEE -->
-  <aside aria-label="Pengumuman Berjalan" class="bg-brand-orange text-white font-mono text-xs md:text-sm font-bold py-2 overflow-hidden border-b-2 border-brand-dark flex select-none relative z-30">
-    <div class="flex animate-marquee whitespace-nowrap gap-6 items-center">
-      <span class="inline-flex items-center gap-2">🔥 DISIKAT PAS DEADLINE • NGE-REBOOT SEMANGAT</span>
+  <aside aria-label="Pengumuman Berjalan" class="bg-brand-orange text-white font-mono text-xs sm:text-sm font-bold py-2 overflow-hidden border-b-2 border-brand-dark flex select-none relative z-30 shadow-md">
+    <div class="flex animate-marquee whitespace-nowrap gap-8 items-center">
+      <span class="inline-flex items-center gap-2">🔥 DISEDIAKAN UNTUK YANG BELUM RESIGN #masihbutuhduit</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: PAKUJAYA & ANGGREK LOKA BSD</span>
+      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: GRAHA RAYA (SEBELAH GOR PAKUJAYA)</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">💼 DISEDIAKAN UNTUK YANG BELUM RESIGN #masihbutuhduit</span>
+      <span class="inline-flex items-center gap-2">☕ DINE-IN / TAKEAWAY LANGSUNG DI BOOTH (DELIVERY COMING SOON)</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">🛵 BISA ORDER LANGSUNG / VIA WHATSAPP</span>
+      <span class="inline-flex items-center gap-2">🔥 DISEDIAKAN UNTUK YANG BELUM RESIGN #masihbutuhduit</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">🔥 DISIKAT PAS DEADLINE • NGE-REBOOT SEMANGAT</span>
-      <span>⚡</span>
-      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: PAKUJAYA & ANGGREK LOKA BSD</span>
+      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: GRAHA RAYA (SEBELAH GOR PAKUJAYA)</span>
       <span>⚡</span>
     </div>
   </aside>
 
   <!-- NAVBAR -->
-  <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-4 py-3 shadow-[0_4px_0_0_#121212]">
+  <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-4 py-2.5 shadow-[0_4px_0_0_#121212]">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <!-- Logo brand -->
-      <a href="#" class="flex items-center gap-2 group">
-        <div class="w-10 h-10 bg-white border-2 border-brand-dark rounded-xl flex items-center justify-center p-1 shadow-[2px_2px_0_0_#121212] group-hover:rotate-6 transition-transform">
-          <!-- SVG Cup with Tie Logo -->
-          <svg viewBox="0 0 100 100" class="w-7 h-7" fill="none" stroke="#121212" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Steam -->
-            <path d="M42 12 Q45 20 40 24" stroke-width="4"/>
-            <path d="M52 8 Q56 18 51 24" stroke-width="4"/>
-            <path d="M62 12 Q65 20 60 24" stroke-width="4"/>
-            <!-- Cup Body -->
-            <path d="M22 28 H78 L71 85 H29 Z" fill="#FFD100"/>
-            <!-- Lid -->
-            <path d="M18 28 H82" stroke-width="7"/>
-            <!-- Corporate Tie -->
-            <polygon points="45,36 55,36 53,42 47,42" fill="#121212"/>
-            <polygon points="47,42 53,42 56,66 50,73 44,66" fill="#121212"/>
-          </svg>
+      <!-- Logo brand with Official Logo asset -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-11 h-11 bg-white border-2 border-brand-dark rounded-xl flex items-center justify-center p-1 shadow-brutal-sm group-hover:rotate-6 transition-transform overflow-hidden">
+          <img src="assets/images/logo_kokop_official.png" alt="Kokop Coffee Logo" class="w-full h-full object-contain" />
         </div>
         <div>
           <span class="font-heading font-black text-xl tracking-tighter text-brand-dark block leading-none">KOKOP</span>
@@ -197,37 +174,38 @@
 
       <!-- Status badge + Quick Actions -->
       <div class="flex items-center gap-2">
-        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-white border-2 border-brand-dark rounded-full text-xs font-bold font-mono shadow-[2px_2px_0_0_#121212]">
+        <div class="flex items-center gap-1.5 px-3 py-1 bg-white border-2 border-brand-dark rounded-full text-xs font-bold font-mono shadow-brutal-sm">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>OPEN 08.00 - 20.00</span>
+          <span class="hidden sm:inline">BUKA 08.00 - 20.00</span>
+          <span class="sm:hidden">08-20</span>
         </div>
 
         <!-- Cart Quick Trigger Button -->
-        <button onclick="toggleCartDrawer()" class="relative btn-bouncy bg-brand-orange text-white font-heading font-extrabold px-3.5 py-1.5 rounded-xl border-2 border-brand-dark shadow-brutal flex items-center gap-1.5 text-sm">
+        <button onclick="toggleCartDrawer()" class="relative btn-spring bg-brand-orange text-white font-heading font-extrabold px-3.5 py-1.5 rounded-xl border-2 border-brand-dark shadow-brutal-sm flex items-center gap-1.5 text-xs sm:text-sm">
           <i data-lucide="shopping-bag" class="w-4 h-4 stroke-[2.5]"></i>
-          <span class="hidden xs:inline">Pesanan</span>
+          <span>Menu</span>
           <span id="cart-badge-count" class="w-5 h-5 bg-brand-yellow text-brand-dark rounded-full text-xs font-black flex items-center justify-center border border-brand-dark ml-0.5">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER (Mobile First Focused, max-w-2xl on mobile up to max-w-4xl for tablet) -->
-  <main class="max-w-4xl mx-auto px-4 pt-4 pb-20 space-y-12">
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl mx-auto px-4 pt-5 pb-24 space-y-12">
 
     <!-- ========================================================================= -->
     <!-- 1. HERO SECTION -->
     <!-- ========================================================================= -->
-    <section class="reveal-on-scroll relative overflow-hidden bg-brand-yellow border-3 border-brand-dark rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#121212] transition-all">
-      <!-- Background pattern -->
-      <div class="absolute inset-0 shipping-container-texture opacity-25 pointer-events-none"></div>
+    <section class="gsap-hero relative overflow-hidden bg-brand-yellow border-3 border-brand-dark rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#121212]">
+      <!-- Ribbed Texture -->
+      <div class="absolute inset-0 shipping-container-texture opacity-30 pointer-events-none"></div>
 
-      <!-- Corner Tag -->
+      <!-- Corner Tag Header -->
       <div class="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10">
         <span class="sticker-badge bg-white text-brand-dark px-3 py-1 rounded-lg text-xs">
           ⚡ KOPI KORPORAT & TEH SEGER
         </span>
-        <span class="font-mono text-xs font-bold text-brand-dark bg-brand-orange text-white px-2.5 py-0.5 rounded-md border border-brand-dark">
+        <span class="font-mono text-xs font-black text-white bg-brand-orange px-2.5 py-0.5 rounded-md border border-brand-dark">
           #masihbutuhduit
         </span>
       </div>
@@ -245,59 +223,53 @@
 
           <!-- Key highlights list -->
           <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs font-bold text-brand-dark">
-            <div class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
+            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
               <span>☕</span> Espresso Nendang
             </div>
-            <div class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
+            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
               <span>🍋</span> Irisan Lemon Asli
             </div>
-            <div class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
+            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
               <span>🏷️</span> Mulai 10 Ribuan
             </div>
-            <div class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
-              <span>🚚</span> Siap Takeaway / Grab
+            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
+              <span>🚚</span> Kontainer Kuning
             </div>
           </div>
 
-          <!-- Hero Primary CTA Button -->
+          <!-- Hero Primary CTA Button & Booth Location CTA -->
           <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <a href="#menu-latte" class="btn-bouncy group relative inline-flex items-center justify-center gap-3 bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-base sm:text-lg px-6 py-3.5 rounded-2xl border-3 border-brand-dark shadow-[4px_4px_0_0_#121212] transition-all animate-pulse-slow">
+            <a href="#menu-latte" class="btn-spring group relative inline-flex items-center justify-center gap-3 bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-base sm:text-lg px-6 py-3.5 rounded-2xl border-3 border-brand-dark shadow-[4px_4px_0_0_#121212] transition-all">
               <span>[ Checkout Menu Sekarang ]</span>
               <i data-lucide="arrow-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform stroke-[3]"></i>
             </a>
             
-            <a href="#lokasi" class="btn-bouncy inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-heading font-bold text-sm px-4 py-3 rounded-2xl border-2 border-brand-dark shadow-[3px_3px_0_0_#121212]">
+            <a href="#lokasi" class="btn-spring inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-heading font-bold text-sm px-4 py-3 rounded-2xl border-2 border-brand-dark shadow-[3px_3px_0_0_#121212]">
               <i data-lucide="map-pin" class="w-4 h-4 text-brand-orange stroke-[2.5]"></i>
               <span>Cek Lokasi Booth</span>
             </a>
           </div>
         </div>
 
-        <!-- Hero Visual (Interactive Cup Card with badge) -->
+        <!-- Hero Visual Poster (Interactive Showpiece Card) -->
         <div class="md:col-span-5 relative flex justify-center mt-2 md:mt-0">
           <div class="relative w-full max-w-[280px] sm:max-w-[320px]">
-            <!-- Decorative badge -->
+            <!-- Decorative best seller sticker -->
             <div class="absolute -top-3 -right-2 z-20 bg-brand-dark text-brand-yellow font-heading font-extrabold text-xs px-3 py-1 rounded-full border-2 border-white shadow-lg rotate-12 flex items-center gap-1">
-              <span>⭐</span> BESTSELLER
+              <span>⭐</span> FRESH BREW
             </div>
 
-            <!-- Cup Showpiece Card -->
-            <div class="bg-white border-3 border-brand-dark rounded-3xl p-4 shadow-[6px_6px_0px_0px_#121212] relative overflow-hidden group">
-              <div class="relative aspect-square rounded-2xl overflow-hidden bg-amber-50 border-2 border-brand-dark flex items-center justify-center">
-                <img src="assets/images/latte_series_ig.png" alt="Kokop Coffee Latte Series" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                <div class="absolute bottom-2 left-3 right-3 text-white">
-                  <p class="font-heading font-extrabold text-sm leading-tight">Es Kopi Susu Creamy</p>
-                  <p class="font-mono text-xs text-brand-yellow">Mulai Rp 10.000,-</p>
-                </div>
+            <div class="bg-white border-3 border-brand-dark rounded-3xl p-3 shadow-[6px_6px_0px_0px_#121212] relative overflow-hidden group">
+              <div class="relative aspect-[4/5] rounded-2xl overflow-hidden bg-amber-100 border-2 border-brand-dark flex items-center justify-center">
+                <img src="assets/images/varian_baru_poster.jpg" alt="Varian Baru Ngokop Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
 
-              <div class="mt-3 flex items-center justify-between text-xs font-mono font-bold text-brand-dark">
+              <div class="mt-2.5 flex items-center justify-between text-xs font-mono font-bold text-brand-dark">
                 <span class="flex items-center gap-1">
                   <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-orange fill-brand-orange"></i>
-                  Disajikan Fresh Tiap Hari
+                  Street Coffee & Tea
                 </span>
-                <span class="bg-brand-yellow px-2 py-0.5 rounded border border-brand-dark">Pakujaya & BSD</span>
+                <span class="bg-brand-yellow px-2 py-0.5 rounded border border-brand-dark">Graha Raya</span>
               </div>
             </div>
           </div>
@@ -305,30 +277,35 @@
       </div>
     </section>
 
-    <!-- PROMO / BANNER STRIP -->
-    <div class="reveal-on-scroll bg-gradient-to-r from-[#222] to-[#181818] border-2 border-brand-yellow rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[4px_4px_0_0_#FFD100]">
-      <div class="flex items-center gap-3 text-white">
-        <div class="w-10 h-10 rounded-xl bg-brand-yellow text-brand-dark flex items-center justify-center font-black text-xl shrink-0">
-          🎁
+    <!-- DINE-IN / DIRECT BOOTH NOTICE (DELIVERY COMING SOON) -->
+    <div class="gsap-card bg-gradient-to-r from-[#1C1C1E] to-[#252528] border-2 border-brand-yellow rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_0_#FFD100]">
+      <div class="flex items-center gap-3.5 text-white">
+        <div class="w-12 h-12 rounded-2xl bg-brand-yellow text-brand-dark flex items-center justify-center font-black text-2xl shrink-0 border-2 border-brand-dark shadow-brutal-sm">
+          🚚
         </div>
-        <div>
-          <h2 class="font-heading font-black text-base text-brand-yellow">Pesan Rame-Rame Buat Temen Sekantor?</h2>
-          <p class="text-xs text-gray-300">Bisa request custom less sugar, extra shot, atau pisah es untuk meeting!</p>
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2">
+            <h2 class="font-heading font-black text-base sm:text-lg text-brand-yellow">Mampir Langsung ke Booth Kontainer!</h2>
+            <span class="bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full">
+              Delivery Coming Soon ⏳
+            </span>
+          </div>
+          <p class="text-xs text-gray-300">Saat ini pemesanan dilayani untuk **Dine-In** & **Takeaway** langsung di booth Graha Raya, atau PO via WhatsApp.</p>
         </div>
       </div>
-      <button onclick="orderViaWhatsappDirect('Halo Kokop Coffee! Mau tanya promo/order rame-rame buat kantor nih.')" class="btn-bouncy w-full sm:w-auto bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-black px-4 py-2 rounded-xl text-xs sm:text-sm border-2 border-brand-dark shrink-0 flex items-center justify-center gap-1.5 shadow-[2px_2px_0_0_#000]">
-        <i data-lucide="message-circle" class="w-4 h-4 stroke-[2.5]"></i>
-        <span>Chat Admin Booth</span>
-      </button>
+      <a href="#lokasi" class="btn-spring w-full sm:w-auto bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm border-2 border-brand-dark shrink-0 flex items-center justify-center gap-2 shadow-[2px_2px_0_0_#000]">
+        <i data-lucide="map-pin" class="w-4 h-4 text-brand-orange stroke-[2.5]"></i>
+        <span>Rute ke Booth</span>
+      </a>
     </div>
 
 
     <!-- ========================================================================= -->
     <!-- 2. MENU - LATTE SERIES (Kopi) -->
     <!-- ========================================================================= -->
-    <section id="menu-latte" class="reveal-on-scroll scroll-mt-20">
+    <section id="menu-latte" class="scroll-mt-20">
       <!-- Section Header -->
-      <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b-2 border-gray-800 pb-3">
+      <div class="gsap-header mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b-2 border-gray-800 pb-3">
         <div>
           <div class="inline-flex items-center gap-1.5 bg-brand-yellow text-brand-dark font-mono text-xs font-black px-2.5 py-0.5 rounded-md border border-brand-dark mb-1.5">
             <span>☕</span> ESPRESSO BASED
@@ -342,46 +319,49 @@
         </div>
         <div class="text-xs font-mono text-brand-yellow flex items-center gap-1">
           <i data-lucide="info" class="w-3.5 h-3.5"></i>
-          <span>Tersedia Dingin (Iced) / Regular Cup</span>
+          <span>Tersedia Dingin (Iced) / 12 OZ</span>
         </div>
       </div>
 
-      <!-- Product Cards Grid: 4 items -->
+      <!-- Product Cards Grid: 4 items (Clean Layout with unblocked titles) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
 
         <!-- Item 1: Ngokop Kopi Susu -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-brand-orange text-white text-[10px] px-2 py-0.5 rounded">
-              ⭐ BEST SELLER
-            </span>
-          </div>
-
-          <div class="flex gap-3.5">
-            <!-- Icon/Visual Thumbnail -->
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/feed_grid_ig.png'); background-position: 10% 90%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
-            </div>
-
-            <!-- Content -->
-            <div class="flex-1 min-w-0">
-              <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-yellow transition-colors truncate">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <!-- Header bar with unblocked title & isolated badge -->
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
                 Ngokop Kopi Susu
               </h3>
-              <div class="font-mono text-base font-black text-brand-yellow mt-0.5">
-                Rp 12.000
+              <span class="sticker-badge bg-brand-orange text-white text-[10px] px-2 py-0.5 rounded shrink-0">
+                ⭐ BEST SELLER
+              </span>
+            </div>
+
+            <div class="flex gap-3.5">
+              <!-- Thumbnail -->
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/latte_series_hq.jpg'); background-position: 50% 30%;"></div>
+                <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-yellow px-1 rounded">12 OZ</span>
               </div>
-              <p class="font-sans text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-                Si Best Seller yang gak pernah salah. Perpaduan espresso nendang dan susu creamy.
-              </p>
+
+              <!-- Details -->
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-base font-black text-brand-yellow">
+                  Rp 12.000
+                </div>
+                <p class="font-sans text-xs text-gray-300 mt-1 line-clamp-2 leading-relaxed">
+                  Si Best Seller yang gak pernah salah. Perpaduan espresso nendang dan susu creamy.
+                </p>
+              </div>
             </div>
           </div>
 
           <!-- Bottom Action Bar -->
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Espresso + Creamy Milk</span>
-            <button onclick="addToCart('Ngokop Kopi Susu', 12000, 'Latte Series')" class="btn-bouncy bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Espresso + Creamy Milk</span>
+            <button onclick="addToCart('Ngokop Kopi Susu', 12000, 'Latte Series')" class="btn-spring bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -389,35 +369,37 @@
         </article>
 
         <!-- Item 2: Ngokop Karamel -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-brand-yellow text-brand-dark text-[10px] px-2 py-0.5 rounded">
-              🍯 SWEET MOOD
-            </span>
-          </div>
-
-          <div class="flex gap-3.5">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/latte_series_ig.png'); background-position: 80% 50%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
-            </div>
-
-            <div class="flex-1 min-w-0">
-              <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-yellow transition-colors truncate">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
                 Ngokop Karamel
               </h3>
-              <div class="font-mono text-base font-black text-brand-yellow mt-0.5">
-                Rp 14.000
+              <span class="sticker-badge bg-brand-yellow text-brand-dark text-[10px] px-2 py-0.5 rounded shrink-0">
+                🍯 SWEET MOOD
+              </span>
+            </div>
+
+            <div class="flex gap-3.5">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/latte_series_hq.jpg'); background-position: 85% 65%;"></div>
+                <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-yellow px-1 rounded">12 OZ</span>
               </div>
-              <p class="font-sans text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-                Sentuhan sirup karamel legit, ngasih mood instan buat meeting dadakan.
-              </p>
+
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-base font-black text-brand-yellow">
+                  Rp 14.000
+                </div>
+                <p class="font-sans text-xs text-gray-300 mt-1 line-clamp-2 leading-relaxed">
+                  Sentuhan sirup karamel legit, ngasih mood instan buat meeting dadakan.
+                </p>
+              </div>
             </div>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Rich Caramel Syrup</span>
-            <button onclick="addToCart('Ngokop Karamel', 14000, 'Latte Series')" class="btn-bouncy bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Rich Caramel Syrup</span>
+            <button onclick="addToCart('Ngokop Karamel', 14000, 'Latte Series')" class="btn-spring bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -425,35 +407,37 @@
         </article>
 
         <!-- Item 3: Ngokop Moka -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-amber-800 text-white text-[10px] px-2 py-0.5 rounded">
-              🍫 COFFEE & CHOCO
-            </span>
-          </div>
-
-          <div class="flex gap-3.5">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/latte_series_ig.png'); background-position: 20% 60%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
-            </div>
-
-            <div class="flex-1 min-w-0">
-              <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-yellow transition-colors truncate">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
                 Ngokop Moka
               </h3>
-              <div class="font-mono text-base font-black text-brand-yellow mt-0.5">
-                Rp 16.000
+              <span class="sticker-badge bg-amber-800 text-white text-[10px] px-2 py-0.5 rounded shrink-0">
+                🍫 COFFEE & CHOCO
+              </span>
+            </div>
+
+            <div class="flex gap-3.5">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/latte_series_hq.jpg'); background-position: 15% 75%;"></div>
+                <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-yellow px-1 rounded">12 OZ</span>
               </div>
-              <p class="font-sans text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-                Kolaborasi epik kopi dan cokelat buat reward di tengah hari padat.
-              </p>
+
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-base font-black text-brand-yellow">
+                  Rp 16.000
+                </div>
+                <p class="font-sans text-xs text-gray-300 mt-1 line-clamp-2 leading-relaxed">
+                  Kolaborasi epik kopi dan cokelat buat reward di tengah hari padat.
+                </p>
+              </div>
             </div>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Dark Cocoa & Espresso</span>
-            <button onclick="addToCart('Ngokop Moka', 16000, 'Latte Series')" class="btn-bouncy bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Dark Cocoa & Espresso</span>
+            <button onclick="addToCart('Ngokop Moka', 16000, 'Latte Series')" class="btn-spring bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -461,35 +445,37 @@
         </article>
 
         <!-- Item 4: Ngokop Americano -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-zinc-700 text-white text-[10px] px-2 py-0.5 rounded">
-              ⚡ 100% FOCUS
-            </span>
-          </div>
-
-          <div class="flex gap-3.5">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/feed_grid_ig.png'); background-position: 85% 70%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
-            </div>
-
-            <div class="flex-1 min-w-0">
-              <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-yellow transition-colors truncate">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
                 Ngokop Americano
               </h3>
-              <div class="font-mono text-base font-black text-brand-yellow mt-0.5">
-                Rp 10.000
+              <span class="sticker-badge bg-zinc-700 text-white text-[10px] px-2 py-0.5 rounded shrink-0">
+                ⚡ 100% FOCUS
+              </span>
+            </div>
+
+            <div class="flex gap-3.5">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden shrink-0 relative flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/feed_grid_ig.png'); background-position: 85% 70%;"></div>
+                <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-yellow px-1 rounded">12 OZ</span>
               </div>
-              <p class="font-sans text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-                Hitam, pekat, dan to the point buat fokus maksimal.
-              </p>
+
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-base font-black text-brand-yellow">
+                  Rp 10.000
+                </div>
+                <p class="font-sans text-xs text-gray-300 mt-1 line-clamp-2 leading-relaxed">
+                  Hitam, pekat, dan to the point buat fokus maksimal.
+                </p>
+              </div>
             </div>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Pure Black Espresso</span>
-            <button onclick="addToCart('Ngokop Americano', 10000, 'Latte Series')" class="btn-bouncy bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Pure Black Espresso</span>
+            <button onclick="addToCart('Ngokop Americano', 10000, 'Latte Series')" class="btn-spring bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -503,9 +489,9 @@
     <!-- ========================================================================= -->
     <!-- 3. MENU - TEA SERIES (Non Kopi) -->
     <!-- ========================================================================= -->
-    <section id="menu-tea" class="reveal-on-scroll scroll-mt-20">
+    <section id="menu-tea" class="scroll-mt-20">
       <!-- Section Header -->
-      <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b-2 border-gray-800 pb-3">
+      <div class="gsap-header mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b-2 border-gray-800 pb-3">
         <div>
           <div class="inline-flex items-center gap-1.5 bg-brand-orange text-white font-mono text-xs font-black px-2.5 py-0.5 rounded-md border border-brand-dark mb-1.5">
             <span>🍃</span> FRESH & BOTANICAL
@@ -527,33 +513,33 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
 
         <!-- Item 1: Ngokop Teh Sejuk -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded">
-              🍋 REAL LEMON
-            </span>
-          </div>
-
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
           <div>
-            <div class="w-full h-32 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/tea_series_ig.png'); background-position: 70% 45%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
+                Ngokop Teh Sejuk
+              </h3>
+              <span class="sticker-badge bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded shrink-0">
+                🍋 REAL LEMON
+              </span>
             </div>
 
-            <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-orange transition-colors">
-              Ngokop Teh Sejuk
-            </h3>
-            <div class="font-mono text-base font-black text-brand-orange mt-0.5">
+            <div class="w-full h-32 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
+              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/tea_series_hq.jpg'); background-position: 70% 50%;"></div>
+              <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-orange px-1 rounded">12 OZ</span>
+            </div>
+
+            <div class="font-mono text-base font-black text-brand-orange">
               Rp 10.000
             </div>
-            <p class="font-sans text-xs text-gray-400 mt-1.5 leading-relaxed">
+            <p class="font-sans text-xs text-gray-300 mt-1.5 leading-relaxed">
               Racikan teh segar dengan irisan lemon beneran.
             </p>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Fresh Lemon Brew</span>
-            <button onclick="addToCart('Ngokop Teh Sejuk', 10000, 'Tea Series')" class="btn-bouncy bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Fresh Lemon Brew</span>
+            <button onclick="addToCart('Ngokop Teh Sejuk', 10000, 'Tea Series')" class="btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -561,33 +547,33 @@
         </article>
 
         <!-- Item 2: Ngokop Milk Tea -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-orange-400 text-brand-dark text-[10px] px-2 py-0.5 rounded">
-              🧋 CREAMY
-            </span>
-          </div>
-
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
           <div>
-            <div class="w-full h-32 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/tea_series_ig.png'); background-position: 25% 45%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
+                Ngokop Milk Tea
+              </h3>
+              <span class="sticker-badge bg-amber-500 text-brand-dark text-[10px] px-2 py-0.5 rounded shrink-0">
+                🧋 CREAMY
+              </span>
             </div>
 
-            <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-orange transition-colors">
-              Ngokop Milk Tea
-            </h3>
-            <div class="font-mono text-base font-black text-brand-orange mt-0.5">
+            <div class="w-full h-32 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
+              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/tea_series_hq.jpg'); background-position: 25% 50%;"></div>
+              <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-orange px-1 rounded">12 OZ</span>
+            </div>
+
+            <div class="font-mono text-base font-black text-brand-orange">
               Rp 13.000
             </div>
-            <p class="font-sans text-xs text-gray-400 mt-1.5 leading-relaxed">
+            <p class="font-sans text-xs text-gray-300 mt-1.5 leading-relaxed">
               Teh susu klasik yang manis dan milky.
             </p>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Classic Milk Blend</span>
-            <button onclick="addToCart('Ngokop Milk Tea', 13000, 'Tea Series')" class="btn-bouncy bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Classic Milk Blend</span>
+            <button onclick="addToCart('Ngokop Milk Tea', 13000, 'Tea Series')" class="btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -595,33 +581,33 @@
         </article>
 
         <!-- Item 3: Ngokop Choco -->
-        <article class="group bg-brand-cardDark rounded-2xl border-2 border-gray-800 hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-3 right-3 z-10">
-            <span class="sticker-badge bg-stone-700 text-white text-[10px] px-2 py-0.5 rounded">
-              🍫 MOOD BOOSTER
-            </span>
-          </div>
-
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
           <div>
-            <div class="w-full h-32 rounded-xl bg-[#252525] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
-              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/feed_grid_ig.png'); background-position: 50% 70%;"></div>
-              <span class="absolute bottom-1 right-1 bg-black/70 text-[10px] font-mono text-white px-1 rounded">12 OZ</span>
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
+                Ngokop Choco
+              </h3>
+              <span class="sticker-badge bg-stone-700 text-white text-[10px] px-2 py-0.5 rounded shrink-0">
+                🍫 MOOD BOOSTER
+              </span>
             </div>
 
-            <h3 class="font-heading font-extrabold text-lg text-white group-hover:text-brand-orange transition-colors">
-              Ngokop Choco
-            </h3>
-            <div class="font-mono text-base font-black text-brand-orange mt-0.5">
+            <div class="w-full h-32 rounded-xl bg-[#252528] border border-gray-700 overflow-hidden relative flex items-center justify-center group-hover:scale-102 transition-transform mb-3">
+              <div class="w-full h-full bg-cover bg-center" style="background-image: url('assets/images/feed_grid_ig.png'); background-position: 50% 70%;"></div>
+              <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-mono text-brand-orange px-1 rounded">12 OZ</span>
+            </div>
+
+            <div class="font-mono text-base font-black text-brand-orange">
               Rp 14.000
             </div>
-            <p class="font-sans text-xs text-gray-400 mt-1.5 leading-relaxed">
+            <p class="font-sans text-xs text-gray-300 mt-1.5 leading-relaxed">
               Cokelat tebal penyelamat otak ngebul.
             </p>
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-gray-500">Rich Cocoa Milk</span>
-            <button onclick="addToCart('Ngokop Choco', 14000, 'Tea Series')" class="btn-bouncy bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-bold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
+            <span class="text-[11px] font-mono text-gray-400">Rich Cocoa Milk</span>
+            <button onclick="addToCart('Ngokop Choco', 14000, 'Tea Series')" class="btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-extrabold text-xs px-3.5 py-1.5 rounded-xl border border-brand-dark flex items-center gap-1.5 shadow-[2px_2px_0_0_#000]">
               <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i>
               <span>Tambah</span>
             </button>
@@ -632,27 +618,27 @@
     </section>
 
     <!-- TESTIMONIAL / VIBE STRIP -->
-    <section class="reveal-on-scroll bg-brand-yellow rounded-3xl border-3 border-brand-dark p-6 shadow-[5px_5px_0px_0px_#121212] relative overflow-hidden">
-      <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl font-heading font-black select-none pointer-events-none">
-        ☕
+    <section class="gsap-quote bg-white rounded-3xl border-3 border-brand-dark p-6 shadow-[5px_5px_0px_0px_#FFD100] relative overflow-hidden flex flex-col sm:flex-row items-center gap-5">
+      <div class="w-16 h-16 rounded-2xl bg-brand-yellow border-2 border-brand-dark flex items-center justify-center text-3xl shrink-0 shadow-brutal-sm">
+        💼
       </div>
-      <div class="relative z-10 max-w-2xl">
+      <div class="relative z-10">
         <span class="sticker-badge bg-brand-dark text-brand-yellow text-xs px-2.5 py-1 rounded-md mb-2">
           💬 KATA MEREKA YANG BELUM RESIGN
         </span>
-        <blockquote class="font-heading font-extrabold text-lg sm:text-xl text-brand-dark mt-2 leading-snug">
+        <blockquote class="font-heading font-black text-xl sm:text-2xl text-brand-dark mt-1 leading-snug">
           "Beli kopi pas kita berantakan itu juga termasuk bertahan hidup."
         </blockquote>
-        <p class="font-mono text-xs text-brand-dark/80 mt-2 font-bold">
-          — Karyawan Korporat di Sekitaran Serpong & BSD
+        <p class="font-mono text-xs text-gray-700 mt-1.5 font-bold">
+          — Karyawan Korporat Graha Raya, Tangerang Selatan
         </p>
       </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- 4. BOOTH LOCATIONS & FOOTER SECTION -->
+    <!-- 4. BOOTH LOCATION (GRAHA RAYA ONLY) & FOOTER -->
     <!-- ========================================================================= -->
-    <footer id="lokasi" class="reveal-on-scroll relative bg-brand-yellow border-3 border-brand-dark rounded-3xl p-6 sm:p-8 shadow-[6px_6px_0px_0px_#121212] text-brand-dark">
+    <footer id="lokasi" class="gsap-footer relative bg-brand-yellow border-3 border-brand-dark rounded-3xl p-6 sm:p-8 shadow-[6px_6px_0px_0px_#121212] text-brand-dark">
       <div class="absolute inset-0 shipping-container-texture opacity-25 pointer-events-none rounded-3xl"></div>
 
       <div class="relative z-10 space-y-6">
@@ -661,88 +647,71 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-brand-dark pb-5">
           <div>
             <div class="flex items-center gap-2 mb-1">
-              <span class="w-3 h-3 bg-brand-orange rounded-full border border-brand-dark"></span>
+              <span class="w-3 h-3 bg-brand-orange rounded-full border border-brand-dark animate-ping"></span>
               <span class="font-mono text-xs font-black uppercase tracking-wider text-brand-dark">YELLOW SHIPPING CONTAINER</span>
             </div>
             <h2 class="font-heading font-black text-2xl sm:text-3xl tracking-tight">
               Mampir ke Kontainer Kuning Kita! 🚚
             </h2>
             <p class="font-sans text-sm font-semibold text-[#2b2b2b] mt-1 max-w-xl">
-              Titik respawn buat lo yang lagi mumet. Hadir di Pakujaya, Serpong Utara & Anggrek Loka BSD.
+              Titik respawn buat lo yang lagi mumet. Hadir langsung di Graha Raya (Pakujaya, Serpong Utara).
             </p>
           </div>
 
-          <!-- Direct Maps / WA Buttons -->
-          <div class="flex gap-2">
-            <a href="https://instagram.com/kokopcofee" target="_blank" rel="noopener noreferrer" class="btn-bouncy inline-flex items-center gap-1.5 bg-brand-dark text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border border-brand-dark shadow-[2px_2px_0_0_#000]">
-              <i data-lucide="instagram" class="w-4 h-4 text-brand-yellow"></i>
-              <span>@kokopcofee</span>
+          <!-- Direct Official Social & WA Links -->
+          <div class="flex flex-wrap gap-2">
+            <a href="https://wa.me/6285714294461" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-emerald-600 text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border border-brand-dark shadow-[2px_2px_0_0_#000]">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>WhatsApp Admin</span>
             </a>
-            <a href="https://tiktok.com/@kokop.coffee7" target="_blank" rel="noopener noreferrer" class="btn-bouncy inline-flex items-center gap-1.5 bg-white text-brand-dark font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border-2 border-brand-dark shadow-[2px_2px_0_0_#000]">
+            <a href="https://www.instagram.com/kokopcofee?igsi=MWE0ZnEyejlzemRudA==" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-brand-dark text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border border-brand-dark shadow-[2px_2px_0_0_#000]">
+              <i data-lucide="instagram" class="w-4 h-4 text-brand-yellow"></i>
+              <span>Instagram</span>
+            </a>
+            <a href="https://www.tiktok.com/@kokop.coffee7?_r=1" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-white text-brand-dark font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border-2 border-brand-dark shadow-[2px_2px_0_0_#000]">
               <i data-lucide="video" class="w-4 h-4 text-brand-orange"></i>
               <span>TikTok</span>
             </a>
           </div>
         </div>
 
-        <!-- 2 Spot Locations Card Grid -->
-        <div class="grid sm:grid-cols-2 gap-4">
-          <!-- Spot 1: Pakujaya -->
-          <div class="bg-white border-2 border-brand-dark rounded-2xl p-4 shadow-[3px_3px_0_0_#121212] flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between mb-2">
-                <span class="sticker-badge bg-brand-yellow text-brand-dark text-[10px] px-2 py-0.5 rounded">
-                  📍 SPOT #01
-                </span>
-                <span class="font-mono text-xs font-bold text-emerald-700 flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Buka 08:00 - 20:00
-                </span>
-              </div>
-              <h3 class="font-heading font-black text-lg text-brand-dark">Pakujaya, Serpong Utara</h3>
-              <p class="font-sans text-xs text-gray-700 mt-1">
-                Depan Gor / Area Ramai Pakujaya, Tangerang Selatan. Siap nongkrong santai atau takeaway kilat.
-              </p>
+        <!-- Single Official Spot Card: Graha Raya / Pakujaya -->
+        <div class="bg-white border-3 border-brand-dark rounded-2xl p-5 shadow-[4px_4px_0_0_#121212]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="sticker-badge bg-brand-orange text-white text-xs px-2.5 py-0.5 rounded">
+                📍 BOOTH RESMI #01
+              </span>
+              <h3 class="font-heading font-black text-xl text-brand-dark">Graha Raya, Pakujaya</h3>
             </div>
-            <div class="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
-              <span class="text-[11px] font-mono text-gray-500 font-bold">Kontainer Kuning Utama</span>
-              <a href="https://maps.google.com/?q=Kokop+Coffee+Pakujaya+Serpong+Utara" target="_blank" class="text-xs font-heading font-extrabold text-brand-orange hover:underline flex items-center gap-1">
-                Petunjuk Arah <i data-lucide="external-link" class="w-3 h-3"></i>
-              </a>
-            </div>
+            <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1.5 w-fit">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Buka Setiap Hari (08:00 - 20:00)
+            </span>
           </div>
 
-          <!-- Spot 2: Anggrek Loka BSD -->
-          <div class="bg-white border-2 border-brand-dark rounded-2xl p-4 shadow-[3px_3px_0_0_#121212] flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between mb-2">
-                <span class="sticker-badge bg-brand-orange text-white text-[10px] px-2 py-0.5 rounded">
-                  📍 SPOT #02
-                </span>
-                <span class="font-mono text-xs font-bold text-emerald-700 flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Buka 08:00 - 20:00
-                </span>
-              </div>
-              <h3 class="font-heading font-black text-lg text-brand-dark">Anggrek Loka BSD</h3>
-              <p class="font-sans text-xs text-gray-700 mt-1">
-                Kawasan Strategis Anggrek Loka, BSD City. Akses pas buat yang mau ngantor atau balik gawe.
-              </p>
+          <p class="font-sans text-sm text-gray-700 leading-relaxed mb-4">
+            Berada di kawasan strategis Graha Raya / Depan GOR Pakujaya, Serpong Utara, Tangerang Selatan. Kontainer kuning eye-catching siap jadi tempat nyeduh kopi espresso creamy & teh sejuk pelepas penat.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-200">
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-gray-600">
+              <i data-lucide="coffee" class="w-4 h-4 text-brand-orange"></i>
+              <span>Dine-in Bar & Takeaway Siap Saji</span>
             </div>
-            <div class="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
-              <span class="text-[11px] font-mono text-gray-500 font-bold">Kontainer Kuning BSD</span>
-              <a href="https://maps.google.com/?q=Kokop+Coffee+Anggrek+Loka+BSD" target="_blank" class="text-xs font-heading font-extrabold text-brand-orange hover:underline flex items-center gap-1">
-                Petunjuk Arah <i data-lucide="external-link" class="w-3 h-3"></i>
-              </a>
-            </div>
+            <a href="https://maps.google.com/?q=Pakujaya+Serpong+Utara+Tangerang+Selatan" target="_blank" class="btn-spring inline-flex items-center gap-1.5 bg-brand-yellow text-brand-dark font-heading font-black text-xs px-3.5 py-2 rounded-xl border border-brand-dark shadow-brutal-sm">
+              <i data-lucide="navigation" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+              <span>Buka Google Maps</span>
+            </a>
           </div>
         </div>
 
         <!-- Social Media Target & Copyright -->
         <div class="pt-4 border-t-2 border-brand-dark flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono font-bold">
-          <div class="flex items-center gap-3">
-            <span>Follow us:</span>
-            <a href="https://instagram.com/kokopcofee" target="_blank" class="hover:text-brand-orange underline">@kokopcofee (Instagram)</a>
+          <div class="flex flex-wrap items-center gap-3">
+            <span>Kontak Kami:</span>
+            <a href="https://wa.me/6285714294461" class="hover:text-brand-orange underline">WA: 0857-1429-4461</a>
             <span>•</span>
-            <a href="https://tiktok.com/@kokop.coffee7" target="_blank" class="hover:text-brand-orange underline">@kokop.coffee7 (TikTok)</a>
+            <a href="https://www.instagram.com/kokopcofee?igsi=MWE0ZnEyejlzemRudA==" target="_blank" class="hover:text-brand-orange underline">@kokopcofee</a>
           </div>
           <div class="text-brand-dark/70">
             © <span id="year-tag">2026</span> KOKOP COFFEE. All rights reserved.
@@ -771,8 +740,8 @@
           <p class="font-mono text-sm font-black text-white" id="sticky-total-price">Rp 0</p>
         </div>
       </div>
-      <button onclick="toggleCartDrawer()" class="btn-bouncy bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-xs sm:text-sm px-4 py-2 rounded-xl border border-white flex items-center gap-1.5 shadow-[2px_2px_0_0_#FFD100]">
-        <span>Lihat & Checkout</span>
+      <button onclick="toggleCartDrawer()" class="btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-xs sm:text-sm px-4 py-2 rounded-xl border border-white flex items-center gap-1.5 shadow-[2px_2px_0_0_#FFD100]">
+        <span>Lihat & Pesan</span>
         <i data-lucide="arrow-right" class="w-4 h-4 stroke-[3]"></i>
       </button>
     </div>
@@ -780,7 +749,7 @@
 
   <!-- Cart Slide-Over / Modal -->
   <div id="cart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div id="cart-panel" class="w-full max-w-lg bg-brand-yellow border-t-4 sm:border-4 border-brand-dark rounded-t-3xl sm:rounded-3xl shadow-[8px_8px_0_0_#121212] p-5 max-h-[85vh] flex flex-col justify-between transform translate-y-full sm:translate-y-6 transition-transform duration-300 relative">
+    <div id="cart-panel" class="w-full max-w-lg bg-brand-yellow border-t-4 sm:border-4 border-brand-dark rounded-t-3xl sm:rounded-3xl shadow-[8px_8px_0_0_#121212] p-5 max-h-[88vh] flex flex-col justify-between transform translate-y-full sm:translate-y-6 transition-transform duration-300 relative">
       
       <!-- Cart Header -->
       <div class="flex items-center justify-between border-b-2 border-brand-dark pb-3 mb-3">
@@ -790,7 +759,7 @@
           </div>
           <div>
             <h3 class="font-heading font-black text-lg text-brand-dark leading-tight">Keranjang Ngokop</h3>
-            <p class="font-mono text-[10px] text-gray-800">Checkout langsung terhubung ke WhatsApp Booth</p>
+            <p class="font-mono text-[10px] text-gray-800">Pre-Order / Reservasi Langsung ke Booth via WA</p>
           </div>
         </div>
         <button onclick="toggleCartDrawer()" class="w-8 h-8 rounded-xl bg-white border-2 border-brand-dark flex items-center justify-center text-brand-dark hover:bg-brand-orange hover:text-white font-bold transition-colors">
@@ -799,22 +768,15 @@
       </div>
 
       <!-- Cart Item List Container -->
-      <div id="cart-items-container" class="flex-1 overflow-y-auto space-y-2 pr-1 my-2 max-h-[40vh]">
+      <div id="cart-items-container" class="flex-1 overflow-y-auto space-y-2 pr-1 my-2 max-h-[35vh]">
         <!-- Dynamic items injected via JavaScript -->
       </div>
 
       <!-- Location / Notes Selection -->
       <div class="bg-white border-2 border-brand-dark rounded-2xl p-3 my-2 space-y-2 text-xs">
-        <label class="block font-heading font-bold text-brand-dark">Pilih Lokasi Booth Penjemputan / Antar:</label>
-        <div class="grid grid-cols-2 gap-2">
-          <label class="flex items-center gap-2 p-2 rounded-xl border border-gray-300 cursor-pointer has-[:checked]:bg-brand-yellow/30 has-[:checked]:border-brand-dark font-medium">
-            <input type="radio" name="order_location" value="Pakujaya, Serpong Utara" checked class="accent-brand-orange" />
-            <span>Pakujaya</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 rounded-xl border border-gray-300 cursor-pointer has-[:checked]:bg-brand-yellow/30 has-[:checked]:border-brand-dark font-medium">
-            <input type="radio" name="order_location" value="Anggrek Loka BSD" class="accent-brand-orange" />
-            <span>Anggrek Loka BSD</span>
-          </label>
+        <div class="flex items-center justify-between">
+          <span class="font-heading font-bold text-brand-dark">Lokasi Booth Pengambilan:</span>
+          <span class="font-mono text-[10px] bg-brand-yellow px-2 py-0.5 rounded font-bold border border-brand-dark">Graha Raya</span>
         </div>
 
         <div class="pt-1">
@@ -825,26 +787,26 @@
       <!-- Summary & Checkout WA Button -->
       <div class="border-t-2 border-brand-dark pt-3 mt-1">
         <div class="flex items-center justify-between mb-3 font-mono">
-          <span class="text-xs font-bold text-brand-dark">TOTAL PEMBAYARAN:</span>
+          <span class="text-xs font-bold text-brand-dark">TOTAL ESTIMASI:</span>
           <span id="cart-grand-total" class="font-heading font-black text-xl text-brand-dark">Rp 0</span>
         </div>
 
-        <button id="checkout-btn" onclick="executeWhatsAppCheckout()" class="btn-bouncy w-full bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-base py-3 rounded-2xl border-2 border-brand-dark shadow-brutal flex items-center justify-center gap-2">
+        <button id="checkout-btn" onclick="executeWhatsAppCheckout()" class="btn-spring w-full bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-base py-3 rounded-2xl border-2 border-brand-dark shadow-brutal flex items-center justify-center gap-2">
           <i data-lucide="message-circle" class="w-5 h-5 stroke-[2.5]"></i>
-          <span>Kirim Pesanan ke WhatsApp</span>
+          <span>Kirim Pesanan ke WA Admin</span>
         </button>
       </div>
 
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & FRAMER-MOTION STYLE SCROLL OBSERVERS -->
+  <!-- JAVASCRIPT LOGIC & GSAP SCROLL ANIMATIONS -->
   <script>
     // State management for Cart
     let cart = [];
 
-    // WhatsApp Contact Target (Kokop Coffee Official)
-    const WA_PHONE = "6281234567890"; // WhatsApp ordering hook
+    // Official WhatsApp Number
+    const WA_PHONE = "6285714294461";
 
     // Format currency to IDR
     function formatIDR(num) {
@@ -865,8 +827,8 @@
       // Trigger Confetti micro-interaction
       if (typeof confetti === 'function') {
         confetti({
-          particleCount: 30,
-          spread: 50,
+          particleCount: 35,
+          spread: 60,
           origin: { y: 0.85 },
           colors: ['#FFD100', '#FF7300', '#121212']
         });
@@ -969,18 +931,18 @@
       }
     }
 
-    // WhatsApp Checkout Execution
+    // WhatsApp Checkout Execution with Official Number
     function executeWhatsAppCheckout() {
       if (cart.length === 0) {
         alert("Keranjang lo masih kosong. Tambah kopi atau teh dulu ya!");
         return;
       }
 
-      const selectedLoc = document.querySelector('input[name="order_location"]:checked')?.value || 'Pakujaya';
+      const selectedLoc = "Booth Graha Raya (Pakujaya, Serpong Utara)";
       const notes = document.getElementById('order-notes').value.trim();
       const totalPrice = cart.reduce((acc, curr) => acc + (curr.qty * curr.price), 0);
 
-      let text = `*HALO KOKOP COFFEE! SAYA MAU PESAN:* 💼☕\n\n`;
+      let text = `*HALO KOKOP COFFEE! SAYA MAU PESAN / PRE-ORDER:* 💼☕\n\n`;
       text += `📍 *Lokasi Booth:* ${selectedLoc}\n`;
       text += `──────────────────\n`;
       cart.forEach((item, index) => {
@@ -991,15 +953,10 @@
       if (notes) {
         text += `📝 *Catatan:* ${notes}\n`;
       }
-      text += `\n_Mohon info ketersediaan & pembayaran ya min! #masihbutuhduit_`;
+      text += `\n_Saya mau ambil langsung di booth kontainer kuning ya min! #masihbutuhduit_`;
 
-      const encodedUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      const encodedUrl = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`;
       window.open(encodedUrl, '_blank');
-    }
-
-    function orderViaWhatsappDirect(customMsg) {
-      const encoded = encodeURIComponent(customMsg);
-      window.open(`https://wa.me/?text=${encoded}`, '_blank');
     }
 
     // Close modal on outer click
@@ -1009,30 +966,76 @@
       }
     });
 
-    // Framer-Motion style IntersectionObserver for smooth scroll reveals
+    // Next-Level Framer Motion Style GSAP ScrollTriggers
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Lucide icons
       lucide.createIcons();
       updateCartUI();
 
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.12
-      };
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
 
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
+        // 1. Hero entrance spring
+        gsap.from(".gsap-hero", {
+          duration: 1,
+          y: 50,
+          opacity: 0,
+          ease: "power3.out"
         });
-      }, observerOptions);
 
-      document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-        observer.observe(el);
-      });
+        // 2. Section headers
+        gsap.utils.toArray(".gsap-header").forEach(header => {
+          gsap.from(header, {
+            scrollTrigger: {
+              trigger: header,
+              start: "top 85%",
+              toggleActions: "play none none none"
+            },
+            duration: 0.8,
+            y: 35,
+            opacity: 0,
+            ease: "power3.out"
+          });
+        });
+
+        // 3. Product Cards Staggered Spring Reveal
+        gsap.utils.toArray(".gsap-card").forEach(card => {
+          gsap.from(card, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top 88%",
+              toggleActions: "play none none none"
+            },
+            duration: 0.7,
+            y: 40,
+            scale: 0.95,
+            opacity: 0,
+            ease: "back.out(1.4)"
+          });
+        });
+
+        // 4. Quote and Footer
+        gsap.from(".gsap-quote", {
+          scrollTrigger: {
+            trigger: ".gsap-quote",
+            start: "top 85%"
+          },
+          duration: 0.8,
+          scale: 0.92,
+          opacity: 0,
+          ease: "power2.out"
+        });
+
+        gsap.from(".gsap-footer", {
+          scrollTrigger: {
+            trigger: ".gsap-footer",
+            start: "top 88%"
+          },
+          duration: 0.9,
+          y: 40,
+          opacity: 0,
+          ease: "power3.out"
+        });
+      }
     });
   </script>
 </body>
