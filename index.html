@@ -901,7 +901,7 @@
               <i class="fa-solid fa-mug-hot text-brand-orange"></i>
               <span>Dine-in Bar & Takeaway Siap Saji</span>
             </div>
-            <a href="https://maps.google.com/?q=Pakujaya+Serpong+Utara+Tangerang+Selatan" target="_blank" class="btn-spring inline-flex items-center gap-1.5 bg-brand-yellow text-brand-dark font-heading font-black text-xs px-3.5 py-2 rounded-xl border border-brand-dark shadow-brutal-sm">
+            <a href="https://maps.app.goo.gl/11RxFh7LNKXDXMNL8?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-brand-yellow text-brand-dark font-heading font-black text-xs px-3.5 py-2 rounded-xl border border-brand-dark shadow-brutal-sm">
               <i class="fa-solid fa-location-arrow"></i>
               <span>Buka Google Maps</span>
             </a>
@@ -978,7 +978,9 @@
       <div class="bg-white border-2 border-brand-dark rounded-2xl p-3 my-2 space-y-2 text-xs">
         <div class="flex items-center justify-between">
           <span class="font-heading font-bold text-brand-dark">Lokasi Booth Pengambilan:</span>
-          <span class="font-mono text-[10px] bg-brand-yellow px-2 py-0.5 rounded font-bold border border-brand-dark">Graha Raya</span>
+          <a href="https://maps.app.goo.gl/11RxFh7LNKXDXMNL8?g_st=ic" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] bg-brand-yellow px-2 py-0.5 rounded font-bold border border-brand-dark hover:bg-brand-orange hover:text-white transition-colors flex items-center gap-1">
+            <i class="fa-solid fa-location-dot"></i> Graha Raya (Maps)
+          </a>
         </div>
 
         <div class="pt-1">
@@ -1006,6 +1008,7 @@
   <script>
     let cart = [];
     const WA_PHONE = "6285714294461";
+    const GMAPS_BOOTH_URL = "https://maps.app.goo.gl/11RxFh7LNKXDXMNL8?g_st=ic";
 
     function formatK(num) {
       if (num === 0) return '0K';
@@ -1167,12 +1170,12 @@
         return;
       }
 
-      const selectedLoc = "Booth Graha Raya (Depan GOR Pakujaya, Serpong Utara)";
       const notes = document.getElementById('order-notes').value.trim();
       const totalPrice = cart.reduce((acc, curr) => acc + (curr.qty * curr.price), 0);
 
       let text = `*HALO KOKOP COFFEE! SAYA MAU PESAN / PRE-ORDER:* 💼☕\n\n`;
-      text += `📍 *Lokasi Booth:* ${selectedLoc}\n`;
+      text += `📍 *Lokasi Booth:* Booth Graha Raya (Depan GOR Pakujaya, Serpong Utara)\n`;
+      text += `🗺️ *Google Maps:* ${GMAPS_BOOTH_URL}\n`;
       text += `──────────────────\n`;
       cart.forEach((item, index) => {
         text += `${index + 1}. *${item.title}* (${item.qty}x) = ${formatK(item.price * item.qty)}\n`;
