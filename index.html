@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome 6 Pro / Free CDN (No Emoji Icons, Professional Vector Icons) -->
+  <!-- Font Awesome 6 Pro CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Tailwind CSS CDN -->
@@ -130,7 +130,7 @@
     }
     .touch-sticker:active {
       cursor: grabbing;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.35));
     }
 
     .card-interactive {
@@ -189,19 +189,18 @@
     </div>
   </aside>
 
-  <!-- NAVBAR (Larger Logo & Explicit "KOKOP COFFEE" Branding) -->
+  <!-- NAVBAR (New Clean Zoomed Logo & Unified Font Style for KOKOP COFFEE) -->
   <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-3 sm:px-4 py-2 sm:py-2.5 shadow-[0_4px_0_0_#121212]">
     <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
       
-      <!-- Brand Logo (Enlarged and Clear) -->
+      <!-- Brand Logo & Unified Bold Black Typography -->
       <a href="#" class="flex items-center gap-2.5 group shrink-0">
-        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-brand-dark rounded-2xl flex items-center justify-center p-1 shadow-brutal-sm group-hover:rotate-6 transition-transform overflow-hidden shrink-0">
-          <img src="assets/images/logo_kokop_official.png" alt="Kokop Coffee Logo Official" class="w-full h-full object-contain scale-110" />
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-brand-dark rounded-2xl flex items-center justify-center p-0.5 shadow-brutal-sm group-hover:rotate-6 transition-transform overflow-hidden shrink-0">
+          <img src="assets/images/logo_header_clean.png" alt="Kokop Coffee Official Logo" class="w-full h-full object-cover" />
         </div>
         <div class="flex flex-col justify-center">
           <span class="font-heading font-black text-xl sm:text-2xl tracking-tighter text-brand-dark block leading-none">KOKOP</span>
-          <span class="font-heading font-black text-xs sm:text-sm tracking-tight text-brand-orange block leading-none mt-0.5">COFFEE</span>
-          <span class="font-mono text-[7.5px] sm:text-[8.5px] tracking-widest text-brand-dark uppercase font-extrabold mt-0.5 block">STREET ROAST</span>
+          <span class="font-heading font-black text-xl sm:text-2xl tracking-tighter text-brand-dark block leading-none -mt-0.5 sm:-mt-1">COFFEE</span>
         </div>
       </a>
 
@@ -236,18 +235,16 @@
     <section class="gsap-hero relative overflow-hidden bg-brand-yellow border-3 border-brand-dark rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#121212]">
       <div class="absolute inset-0 shipping-container-texture opacity-25 pointer-events-none"></div>
 
-      <!-- SMOOTH TOUCH-DRAGGABLE PLASTIC COFFEE CUP STICKER (Follows Finger Exactly) -->
+      <!-- SMOOTH TOUCH-DRAGGABLE OFFICIAL CUP-TIE STICKER (Follows Finger Exactly) -->
       <div id="drag-cup-sticker" class="touch-sticker top-3 right-3 sm:top-5 sm:right-6">
-        <div class="bg-white border-2 border-brand-dark rounded-2xl p-2 shadow-brutal flex items-center gap-2 rotate-[-4deg] hover:rotate-0 transition-transform">
-          <!-- Mini Plastic Cup Visual -->
-          <div class="w-8 h-10 bg-brand-yellow border-2 border-brand-dark rounded-b-md rounded-t-sm relative flex items-center justify-center overflow-hidden shadow-inner">
-            <div class="absolute top-0 inset-x-0 h-1.5 bg-brand-dark"></div>
-            <i class="fa-solid fa-mug-hot text-xs text-brand-dark mt-1"></i>
-            <div class="absolute bottom-0 inset-x-0 h-4 bg-brand-orange/40"></div>
+        <div class="bg-brand-yellow border-3 border-brand-dark rounded-2xl p-2 sm:p-2.5 shadow-[4px_4px_0_0_#121212] flex items-center gap-2 rotate-[-4deg] hover:rotate-0 transition-transform">
+          <!-- Official Cup Tie Cutout Image -->
+          <div class="w-9 h-11 sm:w-10 sm:h-12 bg-white border-2 border-brand-dark rounded-xl p-1 flex items-center justify-center overflow-hidden shadow-inner">
+            <img src="assets/images/cup_tie_sticker.png" alt="Kokop Cup Tie Sticker" class="w-full h-full object-contain" />
           </div>
           <div class="flex flex-col pr-1">
-            <span class="font-heading font-black text-[11px] text-brand-dark leading-none">GESER GUA!</span>
-            <span class="font-mono text-[8.5px] text-brand-orange font-bold leading-none mt-0.5"><i class="fa-solid fa-hand-pointer"></i> Cup Kokop</span>
+            <span class="font-heading font-black text-xs sm:text-sm text-brand-dark leading-none">GESER GUA!</span>
+            <span class="font-mono text-[9px] text-brand-dark/80 font-extrabold leading-none mt-1"><i class="fa-solid fa-hand-pointer text-brand-orange"></i> Cup Kokop</span>
           </div>
         </div>
       </div>
@@ -1235,7 +1232,7 @@
       }
     }
 
-    // Direct 1:1 Smooth Drag Tracker (Eliminates Jitter & Snapback)
+    // Direct 1:1 Smooth Drag Tracker
     function initDirectTouchTracker() {
       const sticker = document.getElementById('drag-cup-sticker');
       if (!sticker) return;
@@ -1270,7 +1267,6 @@
         isDragging = false;
         prevTranslateX = currentTranslateX;
         prevTranslateY = currentTranslateY;
-        // Natural slight elastic settle without jumping back
         sticker.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
       }
 
