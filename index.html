@@ -6,18 +6,19 @@
   <title>KOKOP COFFEE - Bensin Buat Lo yang Belum Resign 💼</title>
   <meta name="description" content="Sepahit-pahitnya kerjaan dan deadline, tetep butuh yang seger-seger. Kopi dan racikan teh andalan dari kokopcoffee siap nge-reboot semangat lo hari ini. #masihbutuhduit" />
 
-  <!-- Google Fonts: Outfit, Plus Jakarta Sans & Space Grotesk -->
+  <!-- Google Fonts: Outfit, Plus Jakarta Sans, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   
-  <!-- Tailwind Play CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- GSAP & ScrollTrigger for Next-Level Framer Motion Style Animations -->
+  <!-- GSAP, ScrollTrigger, Draggable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
@@ -48,23 +49,26 @@
             'brutal': '4px 4px 0px 0px #121212',
             'brutal-sm': '2.5px 2.5px 0px 0px #121212',
             'brutal-orange': '4px 4px 0px 0px #FF7300',
-            'brutal-yellow': '4px 4px 0px 0px #FFD100',
-            'glow-yellow': '0 0 30px rgba(255, 209, 0, 0.4)',
-            'glow-orange': '0 0 30px rgba(255, 115, 0, 0.45)'
+            'brutal-yellow': '4px 4px 0px 0px #FFD100'
           },
           keyframes: {
             marquee: {
               '0%': { transform: 'translateX(0%)' },
               '100%': { transform: 'translateX(-50%)' }
             },
-            badgePulse: {
-              '0%, 100%': { transform: 'scale(1)' },
-              '50%': { transform: 'scale(1.05)' }
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-10px) rotate(2deg)' }
+            },
+            pulseBlink: {
+              '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+              '50%': { opacity: '0.4', transform: 'scale(0.85)' }
             }
           },
           animation: {
-            'marquee': 'marquee 16s linear infinite',
-            'badge-pulse': 'badgePulse 2s ease-in-out infinite'
+            'marquee': 'marquee 14s linear infinite',
+            'float': 'floatSlow 4s ease-in-out infinite',
+            'blink': 'pulseBlink 1.5s ease-in-out infinite'
           }
         }
       }
@@ -80,16 +84,16 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Container shipping ribbed texture */
+    /* Container ribbed metal texture */
     .shipping-container-texture {
       background: repeating-linear-gradient(
         90deg,
-        rgba(0, 0, 0, 0.06) 0px,
-        rgba(0, 0, 0, 0.06) 14px,
-        rgba(255, 255, 255, 0.14) 14px,
-        rgba(255, 255, 255, 0.14) 18px,
-        rgba(0, 0, 0, 0.08) 18px,
-        rgba(0, 0, 0, 0.08) 32px
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 14px,
+        rgba(255, 255, 255, 0.12) 14px,
+        rgba(255, 255, 255, 0.12) 18px,
+        rgba(0, 0, 0, 0.07) 18px,
+        rgba(0, 0, 0, 0.07) 32px
       );
     }
 
@@ -110,21 +114,44 @@
       transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
     .btn-spring:hover {
-      transform: translateY(-3px) scale(1.015);
+      transform: translateY(-3px) scale(1.02);
     }
     .btn-spring:active {
-      transform: translateY(2px) scale(0.97);
+      transform: translateY(2px) scale(0.96);
       box-shadow: 1px 1px 0px #121212 !important;
     }
 
-    /* GSAP Animated Elements initial visibility */
-    .gsap-reveal {
-      will-change: transform, opacity;
+    /* Interactive Draggable Sticker Cursor */
+    .drag-sticker {
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .drag-sticker:active {
+      cursor: grabbing;
+      transform: scale(1.1) !important;
+    }
+
+    /* 3D tilt card wrapper */
+    .card-interactive {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transform-style: preserve-3d;
+    }
+    .card-interactive:hover {
+      transform: translateY(-4px);
     }
 
     /* Modal Backdrop */
     .modal-active {
       overflow: hidden;
+    }
+
+    /* Floating Bubble particles */
+    .floating-particle {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      opacity: 0.15;
     }
 
     /* Custom Scrollbar */
@@ -140,50 +167,57 @@
     }
   </style>
 </head>
-<body class="bg-[#0F0F10] text-[#121212] antialiased selection:bg-[#FF7300] selection:text-white">
+<body class="bg-[#0F0F10] text-[#121212] antialiased selection:bg-[#FF7300] selection:text-white relative">
 
   <!-- TOP RUNNING TICKER / MARQUEE -->
   <aside aria-label="Pengumuman Berjalan" class="bg-brand-orange text-white font-mono text-xs sm:text-sm font-bold py-2 overflow-hidden border-b-2 border-brand-dark flex select-none relative z-30 shadow-md">
     <div class="flex animate-marquee whitespace-nowrap gap-8 items-center">
       <span class="inline-flex items-center gap-2">🔥 DISEDIAKAN UNTUK YANG BELUM RESIGN #masihbutuhduit</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: GRAHA RAYA (SEBELAH GOR PAKUJAYA)</span>
+      <span class="inline-flex items-center gap-2">📍 BOOTH: GRAHA RAYA (DEPAN GOR PAKUJAYA)</span>
       <span>⚡</span>
       <span class="inline-flex items-center gap-2">☕ DINE-IN / TAKEAWAY LANGSUNG DI BOOTH (DELIVERY COMING SOON)</span>
       <span>⚡</span>
+      <span class="inline-flex items-center gap-2">✨ NGOCOK MOOD SEHARIAN DENGAN ESPRESSO FRESH</span>
+      <span>⚡</span>
       <span class="inline-flex items-center gap-2">🔥 DISEDIAKAN UNTUK YANG BELUM RESIGN #masihbutuhduit</span>
       <span>⚡</span>
-      <span class="inline-flex items-center gap-2">📍 KONTENER KUNING: GRAHA RAYA (SEBELAH GOR PAKUJAYA)</span>
+      <span class="inline-flex items-center gap-2">📍 BOOTH: GRAHA RAYA (DEPAN GOR PAKUJAYA)</span>
       <span>⚡</span>
     </div>
   </aside>
 
-  <!-- NAVBAR -->
-  <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-4 py-2.5 shadow-[0_4px_0_0_#121212]">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <!-- Logo brand with Official Logo asset -->
-      <a href="#" class="flex items-center gap-2.5 group">
-        <div class="w-11 h-11 bg-white border-2 border-brand-dark rounded-xl flex items-center justify-center p-1 shadow-brutal-sm group-hover:rotate-6 transition-transform overflow-hidden">
+  <!-- NAVBAR (Responsive Ultra-Clean Layout) -->
+  <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-3 sm:px-4 py-2 sm:py-2.5 shadow-[0_4px_0_0_#121212]">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group shrink-0">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 bg-white border-2 border-brand-dark rounded-xl flex items-center justify-center p-1 shadow-brutal-sm group-hover:rotate-6 transition-transform overflow-hidden">
           <img src="assets/images/logo_kokop_official.png" alt="Kokop Coffee Logo" class="w-full h-full object-contain" />
         </div>
         <div>
-          <span class="font-heading font-black text-xl tracking-tighter text-brand-dark block leading-none">KOKOP</span>
-          <span class="font-mono text-[9px] tracking-widest text-brand-dark uppercase font-extrabold -mt-0.5 block">COFFEE • STREET ROAST</span>
+          <span class="font-heading font-black text-lg sm:text-xl tracking-tighter text-brand-dark block leading-none">KOKOP</span>
+          <span class="font-mono text-[8.5px] sm:text-[9.5px] tracking-widest text-brand-dark uppercase font-extrabold -mt-0.5 block">COFFEE • STREET ROAST</span>
         </div>
       </a>
 
-      <!-- Status badge + Quick Actions -->
-      <div class="flex items-center gap-2">
-        <div class="flex items-center gap-1.5 px-3 py-1 bg-white border-2 border-brand-dark rounded-full text-xs font-bold font-mono shadow-brutal-sm">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="hidden sm:inline">BUKA 08.00 - 20.00</span>
-          <span class="sm:hidden">08-20</span>
+      <!-- Right Header Actions (Realtime Dynamic Badge & Menu Trigger) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        
+        <!-- Live Operating Dynamic Badge (Adapts to real current hour) -->
+        <div id="live-hours-badge" class="flex items-center gap-1.5 px-2 sm:px-3 py-1 bg-white border-2 border-brand-dark rounded-xl text-[11px] sm:text-xs font-bold font-mono shadow-brutal-sm">
+          <span id="live-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-blink shrink-0"></span>
+          <div class="flex flex-col leading-tight">
+            <span id="live-status-text" class="text-[9px] sm:text-[10px] text-emerald-700 font-black uppercase">BUKA SEKARANG</span>
+            <span class="text-[10px] sm:text-[11px] text-brand-dark font-extrabold">08:00 - 20:00</span>
+          </div>
         </div>
 
         <!-- Cart Quick Trigger Button -->
-        <button onclick="toggleCartDrawer()" class="relative btn-spring bg-brand-orange text-white font-heading font-extrabold px-3.5 py-1.5 rounded-xl border-2 border-brand-dark shadow-brutal-sm flex items-center gap-1.5 text-xs sm:text-sm">
+        <button onclick="toggleCartDrawer()" class="relative btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border-2 border-brand-dark shadow-brutal-sm flex items-center gap-1.5 text-xs sm:text-sm">
           <i data-lucide="shopping-bag" class="w-4 h-4 stroke-[2.5]"></i>
-          <span>Menu</span>
+          <span class="hidden xs:inline">Menu</span>
           <span id="cart-badge-count" class="w-5 h-5 bg-brand-yellow text-brand-dark rounded-full text-xs font-black flex items-center justify-center border border-brand-dark ml-0.5">0</span>
         </button>
       </div>
@@ -191,21 +225,26 @@
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-4xl mx-auto px-4 pt-5 pb-24 space-y-12">
+  <main class="max-w-4xl mx-auto px-4 pt-5 pb-24 space-y-10 sm:space-y-14 relative">
 
     <!-- ========================================================================= -->
-    <!-- 1. HERO SECTION -->
+    <!-- 1. HERO SECTION WITH INTERACTIVE 3D PARALLAX & DRAGGABLE STICKERS -->
     <!-- ========================================================================= -->
     <section class="gsap-hero relative overflow-hidden bg-brand-yellow border-3 border-brand-dark rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#121212]">
       <!-- Ribbed Texture -->
-      <div class="absolute inset-0 shipping-container-texture opacity-30 pointer-events-none"></div>
+      <div class="absolute inset-0 shipping-container-texture opacity-25 pointer-events-none"></div>
 
-      <!-- Corner Tag Header -->
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10">
+      <!-- Playful Floating / Draggable Sticker #1 (Gen Z sticker interaction) -->
+      <div id="drag-tag-1" class="drag-sticker absolute top-3 right-4 z-20 bg-brand-dark text-brand-yellow font-heading font-black text-xs px-3 py-1 rounded-xl border-2 border-white shadow-brutal rotate-6 flex items-center gap-1">
+        <span>✨</span> GESER GUA! 👈
+      </div>
+
+      <!-- Corner Header Tags -->
+      <div class="flex flex-wrap items-center gap-2 mb-4 relative z-10">
         <span class="sticker-badge bg-white text-brand-dark px-3 py-1 rounded-lg text-xs">
           ⚡ KOPI KORPORAT & TEH SEGER
         </span>
-        <span class="font-mono text-xs font-black text-white bg-brand-orange px-2.5 py-0.5 rounded-md border border-brand-dark">
+        <span class="font-mono text-xs font-black text-white bg-brand-orange px-2.5 py-0.5 rounded-md border border-brand-dark animate-bounce">
           #masihbutuhduit
         </span>
       </div>
@@ -214,57 +253,65 @@
         <!-- Hero Copy -->
         <div class="md:col-span-7 space-y-4">
           <h1 class="font-heading font-black text-3xl sm:text-4xl md:text-5xl leading-[1.08] text-brand-dark tracking-tight">
-            Bensin Buat Lo yang <span class="bg-brand-orange text-white px-2 py-0.5 rounded-xl border-2 border-brand-dark inline-block rotate-[-1deg] shadow-[3px_3px_0_0_#121212]">Belum Resign.</span> 💼
+            Bensin Buat Lo yang <span class="bg-brand-orange text-white px-2.5 py-0.5 rounded-xl border-2 border-brand-dark inline-block rotate-[-1deg] shadow-[3px_3px_0_0_#121212]">Belum Resign.</span> 💼
           </h1>
           
           <p class="font-sans text-sm sm:text-base font-semibold text-[#242424] leading-relaxed">
             Sepahit-pahitnya kerjaan dan deadline, tetep butuh yang seger-seger. Kopi dan racikan teh andalan dari <strong class="text-brand-dark underline decoration-brand-orange decoration-2">kokopcoffee</strong> siap nge-reboot semangat lo hari ini.
           </p>
 
-          <!-- Key highlights list -->
+          <!-- Interactive Highlights Chips (Clickable sound/confetti micro-interaction) -->
           <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs font-bold text-brand-dark">
-            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
-              <span>☕</span> Espresso Nendang
-            </div>
-            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
-              <span>🍋</span> Irisan Lemon Asli
-            </div>
-            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
-              <span>🏷️</span> Mulai 10 Ribuan
-            </div>
-            <div class="flex items-center gap-1.5 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-brand-dark">
-              <span>🚚</span> Kontainer Kuning
-            </div>
+            <button onclick="sparkleChip(this, '☕ Espresso Nendang!')" class="btn-spring flex items-center justify-start gap-1.5 bg-white/80 hover:bg-white backdrop-blur-sm p-2 rounded-xl border border-brand-dark text-left shadow-sm">
+              <span class="text-base">☕</span> Espresso Nendang
+            </button>
+            <button onclick="sparkleChip(this, '🍋 Irisan Lemon Asli!')" class="btn-spring flex items-center justify-start gap-1.5 bg-white/80 hover:bg-white backdrop-blur-sm p-2 rounded-xl border border-brand-dark text-left shadow-sm">
+              <span class="text-base">🍋</span> Irisan Lemon Asli
+            </button>
+            <button onclick="sparkleChip(this, '🏷️ Ramah Kantong!')" class="btn-spring flex items-center justify-start gap-1.5 bg-white/80 hover:bg-white backdrop-blur-sm p-2 rounded-xl border border-brand-dark text-left shadow-sm">
+              <span class="text-base">🏷️</span> Mulai 10 Ribuan
+            </button>
+            <button onclick="sparkleChip(this, '🚚 Booth Graha Raya!')" class="btn-spring flex items-center justify-start gap-1.5 bg-white/80 hover:bg-white backdrop-blur-sm p-2 rounded-xl border border-brand-dark text-left shadow-sm">
+              <span class="text-base">🚚</span> Kontainer Kuning
+            </button>
           </div>
 
-          <!-- Hero Primary CTA Button & Booth Location CTA -->
+          <!-- Hero Primary CTA Buttons -->
           <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <a href="#menu-latte" class="btn-spring group relative inline-flex items-center justify-center gap-3 bg-brand-orange hover:bg-brand-orangeHover text-white font-heading font-black text-base sm:text-lg px-6 py-3.5 rounded-2xl border-3 border-brand-dark shadow-[4px_4px_0_0_#121212] transition-all">
               <span>[ Checkout Menu Sekarang ]</span>
               <i data-lucide="arrow-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform stroke-[3]"></i>
             </a>
             
-            <a href="#lokasi" class="btn-spring inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-heading font-bold text-sm px-4 py-3 rounded-2xl border-2 border-brand-dark shadow-[3px_3px_0_0_#121212]">
+            <a href="#lokasi" class="btn-spring inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-heading font-bold text-sm px-4 py-3.5 rounded-2xl border-2 border-brand-dark shadow-[3px_3px_0_0_#121212]">
               <i data-lucide="map-pin" class="w-4 h-4 text-brand-orange stroke-[2.5]"></i>
               <span>Cek Lokasi Booth</span>
             </a>
           </div>
         </div>
 
-        <!-- Hero Visual Poster (Interactive Showpiece Card) -->
+        <!-- Hero Visual Poster (Interactive Tilt & Draggable Badge) -->
         <div class="md:col-span-5 relative flex justify-center mt-2 md:mt-0">
-          <div class="relative w-full max-w-[280px] sm:max-w-[320px]">
-            <!-- Decorative best seller sticker -->
-            <div class="absolute -top-3 -right-2 z-20 bg-brand-dark text-brand-yellow font-heading font-extrabold text-xs px-3 py-1 rounded-full border-2 border-white shadow-lg rotate-12 flex items-center gap-1">
+          <div class="relative w-full max-w-[280px] sm:max-w-[320px] card-interactive">
+            
+            <!-- Draggable Badge #2 -->
+            <div id="drag-tag-2" class="drag-sticker absolute -top-3 -right-2 z-30 bg-brand-dark text-brand-yellow font-heading font-black text-xs px-3 py-1 rounded-full border-2 border-white shadow-lg rotate-12 flex items-center gap-1">
               <span>⭐</span> FRESH BREW
             </div>
 
+            <!-- Poster Card -->
             <div class="bg-white border-3 border-brand-dark rounded-3xl p-3 shadow-[6px_6px_0px_0px_#121212] relative overflow-hidden group">
               <div class="relative aspect-[4/5] rounded-2xl overflow-hidden bg-amber-100 border-2 border-brand-dark flex items-center justify-center">
                 <img src="assets/images/varian_baru_poster.jpg" alt="Varian Baru Ngokop Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                
+                <!-- Floating tap-me indicator for Gen-Z -->
+                <div class="absolute bottom-2 inset-x-2 bg-black/75 backdrop-blur-md text-white p-2 rounded-xl text-center border border-white/20">
+                  <p class="font-heading font-black text-xs text-brand-yellow">🔥 Varian Baru: Karamel & Moka</p>
+                  <p class="font-mono text-[10px] text-gray-300">Siap nyelametin harimu yang padet</p>
+                </div>
               </div>
 
-              <div class="mt-2.5 flex items-center justify-between text-xs font-mono font-bold text-brand-dark">
+              <div class="mt-2.5 flex items-center justify-between text-xs font-mono font-bold text-brand-dark px-1">
                 <span class="flex items-center gap-1">
                   <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-orange fill-brand-orange"></i>
                   Street Coffee & Tea
@@ -277,6 +324,72 @@
       </div>
     </section>
 
+    <!-- LIVE MOOD GENERATOR / INTERACTIVE SOUNDBOARD (GEN Z & BOOMER ENGAGEMENT) -->
+    <section class="gsap-card bg-[#18181A] border-2 border-brand-yellow rounded-3xl p-5 shadow-[4px_4px_0_0_#FFD100] text-white">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <span class="sticker-badge bg-brand-yellow text-brand-dark text-[10px] px-2 py-0.5 rounded mb-1">
+            🎮 REBOOT MOOD CORNER
+          </span>
+          <h2 class="font-heading font-black text-lg sm:text-xl text-white">Lagi Berada di Fase Mana Hari Ini?</h2>
+          <p class="text-xs text-gray-400">Pilih kondisi lo sekarang, kami rekomendasikan racikan yang paling pas:</p>
+        </div>
+        <div class="text-xs font-mono text-brand-yellow font-bold">
+          ⚡ Instant Mood Selector
+        </div>
+      </div>
+
+      <!-- Interactive Mood Buttons -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <button onclick="selectMood('deadline')" class="btn-spring mood-btn bg-[#242428] hover:bg-brand-orange text-left p-3 rounded-2xl border border-gray-700 transition-all flex flex-col justify-between group">
+          <span class="text-2xl mb-2 group-hover:scale-125 transition-transform">💻</span>
+          <div>
+            <p class="font-heading font-black text-xs text-white">Dikejar Deadline</p>
+            <p class="font-mono text-[10px] text-gray-400 group-hover:text-white">Butuh fokus tinggi</p>
+          </div>
+        </button>
+
+        <button onclick="selectMood('meeting')" class="btn-spring mood-btn bg-[#242428] hover:bg-brand-orange text-left p-3 rounded-2xl border border-gray-700 transition-all flex flex-col justify-between group">
+          <span class="text-2xl mb-2 group-hover:scale-125 transition-transform">🗣️</span>
+          <div>
+            <p class="font-heading font-black text-xs text-white">Meeting Marathon</p>
+            <p class="font-mono text-[10px] text-gray-400 group-hover:text-white">Butuh mood manis</p>
+          </div>
+        </button>
+
+        <button onclick="selectMood('panas')" class="btn-spring mood-btn bg-[#242428] hover:bg-brand-orange text-left p-3 rounded-2xl border border-gray-700 transition-all flex flex-col justify-between group">
+          <span class="text-2xl mb-2 group-hover:scale-125 transition-transform">☀️</span>
+          <div>
+            <p class="font-heading font-black text-xs text-white">Cuaca Panas Pol</p>
+            <p class="font-mono text-[10px] text-gray-400 group-hover:text-white">Butuh yang seger</p>
+          </div>
+        </button>
+
+        <button onclick="selectMood('mumet')" class="btn-spring mood-btn bg-[#242428] hover:bg-brand-orange text-left p-3 rounded-2xl border border-gray-700 transition-all flex flex-col justify-between group">
+          <span class="text-2xl mb-2 group-hover:scale-125 transition-transform">🤯</span>
+          <div>
+            <p class="font-heading font-black text-xs text-white">Otak Mau Meledak</p>
+            <p class="font-mono text-[10px] text-gray-400 group-hover:text-white">Butuh cokelat tebal</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Dynamic Mood Recommendation Box -->
+      <div id="mood-result-box" class="mt-4 hidden p-3.5 bg-brand-dark border-2 border-brand-orange rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
+        <div class="flex items-center gap-3">
+          <div id="mood-icon" class="text-3xl">☕</div>
+          <div>
+            <p class="text-[11px] font-mono text-brand-yellow font-bold uppercase" id="mood-label">Rekomendasi Spesial Buat Lo:</p>
+            <p class="font-heading font-black text-base text-white" id="mood-drink">Ngokop Kopi Susu (Rp 12.000)</p>
+          </div>
+        </div>
+        <button id="mood-add-btn" class="btn-spring w-full sm:w-auto bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-black text-xs px-4 py-2 rounded-xl border border-brand-dark flex items-center justify-center gap-1.5 shadow-sm">
+          <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i>
+          <span>Tambah ke Pesanan</span>
+        </button>
+      </div>
+    </section>
+
     <!-- DINE-IN / DIRECT BOOTH NOTICE (DELIVERY COMING SOON) -->
     <div class="gsap-card bg-gradient-to-r from-[#1C1C1E] to-[#252528] border-2 border-brand-yellow rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_0_#FFD100]">
       <div class="flex items-center gap-3.5 text-white">
@@ -284,13 +397,13 @@
           🚚
         </div>
         <div class="space-y-0.5">
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <h2 class="font-heading font-black text-base sm:text-lg text-brand-yellow">Mampir Langsung ke Booth Kontainer!</h2>
             <span class="bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full">
               Delivery Coming Soon ⏳
             </span>
           </div>
-          <p class="text-xs text-gray-300">Saat ini pemesanan dilayani untuk **Dine-In** & **Takeaway** langsung di booth Graha Raya, atau PO via WhatsApp.</p>
+          <p class="text-xs text-gray-300">Pemesanan dilayani untuk **Dine-In** & **Takeaway** langsung di booth Graha Raya, atau PO via WhatsApp.</p>
         </div>
       </div>
       <a href="#lokasi" class="btn-spring w-full sm:w-auto bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm border-2 border-brand-dark shrink-0 flex items-center justify-center gap-2 shadow-[2px_2px_0_0_#000]">
@@ -323,11 +436,11 @@
         </div>
       </div>
 
-      <!-- Product Cards Grid: 4 items (Clean Layout with unblocked titles) -->
+      <!-- Product Cards Grid: 4 items (Clean, non-overlapping titles) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
 
         <!-- Item 1: Ngokop Kopi Susu -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <!-- Header bar with unblocked title & isolated badge -->
             <div class="flex items-start justify-between gap-2 mb-2.5">
@@ -369,7 +482,7 @@
         </article>
 
         <!-- Item 2: Ngokop Karamel -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
@@ -407,7 +520,7 @@
         </article>
 
         <!-- Item 3: Ngokop Moka -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
@@ -445,7 +558,7 @@
         </article>
 
         <!-- Item 4: Ngokop Americano -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-yellow p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FFD100] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-yellow transition-colors leading-tight">
@@ -513,7 +626,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
 
         <!-- Item 1: Ngokop Teh Sejuk -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
@@ -547,7 +660,7 @@
         </article>
 
         <!-- Item 2: Ngokop Milk Tea -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
@@ -581,7 +694,7 @@
         </article>
 
         <!-- Item 3: Ngokop Choco -->
-        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden">
+        <article class="gsap-card group bg-brand-cardDark rounded-2xl border-2 border-brand-borderDark hover:border-brand-orange p-4 transition-all duration-300 hover:shadow-[4px_4px_0_0_#FF7300] flex flex-col justify-between relative overflow-hidden card-interactive">
           <div>
             <div class="flex items-start justify-between gap-2 mb-2.5">
               <h3 class="font-heading font-black text-lg text-white group-hover:text-brand-orange transition-colors leading-tight">
@@ -619,7 +732,7 @@
 
     <!-- TESTIMONIAL / VIBE STRIP -->
     <section class="gsap-quote bg-white rounded-3xl border-3 border-brand-dark p-6 shadow-[5px_5px_0px_0px_#FFD100] relative overflow-hidden flex flex-col sm:flex-row items-center gap-5">
-      <div class="w-16 h-16 rounded-2xl bg-brand-yellow border-2 border-brand-dark flex items-center justify-center text-3xl shrink-0 shadow-brutal-sm">
+      <div class="w-16 h-16 rounded-2xl bg-brand-yellow border-2 border-brand-dark flex items-center justify-center text-3xl shrink-0 shadow-brutal-sm animate-float">
         💼
       </div>
       <div class="relative z-10">
@@ -660,7 +773,7 @@
 
           <!-- Direct Official Social & WA Links -->
           <div class="flex flex-wrap gap-2">
-            <a href="https://wa.me/6285714294461" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-emerald-600 text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border border-brand-dark shadow-[2px_2px_0_0_#000]">
+            <a href="https://wa.me/6285714294461" target="_blank" rel="noopener noreferrer" class="btn-spring inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl border border-brand-dark shadow-[2px_2px_0_0_#000]">
               <i data-lucide="message-circle" class="w-4 h-4"></i>
               <span>WhatsApp Admin</span>
             </a>
@@ -685,7 +798,7 @@
               <h3 class="font-heading font-black text-xl text-brand-dark">Graha Raya, Pakujaya</h3>
             </div>
             <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1.5 w-fit">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Buka Setiap Hari (08:00 - 20:00)
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-blink"></span> Buka Setiap Hari (08:00 - 20:00)
             </span>
           </div>
 
@@ -800,20 +913,38 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & GSAP SCROLL ANIMATIONS -->
+  <!-- JAVASCRIPT LOGIC, REAL-TIME STATUS & GSAP FLUID DYNAMICS -->
   <script>
-    // State management for Cart
     let cart = [];
-
-    // Official WhatsApp Number
     const WA_PHONE = "6285714294461";
 
-    // Format currency to IDR
     function formatIDR(num) {
       return 'Rp ' + Number(num).toLocaleString('id-ID');
     }
 
-    // Add item to cart with bouncy feedback
+    // Real-time Operating Hours Checker
+    function updateLiveOperatingStatus() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const isOpen = (currentHour >= 8 && currentHour < 20);
+
+      const statusDot = document.getElementById('live-status-dot');
+      const statusText = document.getElementById('live-status-text');
+
+      if (statusDot && statusText) {
+        if (isOpen) {
+          statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-blink shrink-0";
+          statusText.className = "text-[9px] sm:text-[10px] text-emerald-700 font-black uppercase";
+          statusText.textContent = "BUKA SEKARANG";
+        } else {
+          statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0";
+          statusText.className = "text-[9px] sm:text-[10px] text-amber-700 font-black uppercase";
+          statusText.textContent = "BUKA BESOK 08:00";
+        }
+      }
+    }
+
+    // Add item to cart with bouncy feedback & confetti
     function addToCart(title, price, category) {
       const existing = cart.find(item => item.title === title);
       if (existing) {
@@ -824,17 +955,15 @@
 
       updateCartUI();
 
-      // Trigger Confetti micro-interaction
       if (typeof confetti === 'function') {
         confetti({
-          particleCount: 35,
-          spread: 60,
-          origin: { y: 0.85 },
-          colors: ['#FFD100', '#FF7300', '#121212']
+          particleCount: 40,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ['#FFD100', '#FF7300', '#FFFFFF', '#121212']
         });
       }
 
-      // Quick visual badge bounce
       const badge = document.getElementById('cart-badge-count');
       badge.classList.add('scale-125', 'bg-brand-orange', 'text-white');
       setTimeout(() => {
@@ -842,7 +971,6 @@
       }, 250);
     }
 
-    // Change Item QTY
     function updateQty(index, delta) {
       if (!cart[index]) return;
       cart[index].qty += delta;
@@ -852,7 +980,6 @@
       updateCartUI();
     }
 
-    // Synchronize UI elements
     function updateCartUI() {
       const badge = document.getElementById('cart-badge-count');
       const stickyCount = document.getElementById('sticky-item-count');
@@ -869,7 +996,6 @@
       stickyTotal.textContent = formatIDR(totalPrice);
       grandTotal.textContent = formatIDR(totalPrice);
 
-      // Show/hide floating bar
       if (totalItems > 0) {
         floatingBar.classList.remove('translate-y-24');
         floatingBar.classList.add('translate-y-0');
@@ -878,7 +1004,6 @@
         floatingBar.classList.remove('translate-y-0');
       }
 
-      // Render Item List inside modal
       if (cart.length === 0) {
         itemsContainer.innerHTML = `
           <div class="py-8 text-center text-brand-dark">
@@ -906,11 +1031,9 @@
         `).join('');
       }
 
-      // Re-init lucide icons for fresh elements
       lucide.createIcons();
     }
 
-    // Toggle Cart Drawer
     function toggleCartDrawer() {
       const modal = document.getElementById('cart-modal');
       const panel = document.getElementById('cart-panel');
@@ -931,14 +1054,13 @@
       }
     }
 
-    // WhatsApp Checkout Execution with Official Number
     function executeWhatsAppCheckout() {
       if (cart.length === 0) {
         alert("Keranjang lo masih kosong. Tambah kopi atau teh dulu ya!");
         return;
       }
 
-      const selectedLoc = "Booth Graha Raya (Pakujaya, Serpong Utara)";
+      const selectedLoc = "Booth Graha Raya (Depan GOR Pakujaya, Serpong Utara)";
       const notes = document.getElementById('order-notes').value.trim();
       const totalPrice = cart.reduce((acc, curr) => acc + (curr.qty * curr.price), 0);
 
@@ -959,68 +1081,152 @@
       window.open(encodedUrl, '_blank');
     }
 
-    // Close modal on outer click
+    // Sparkle micro-interaction for highlight chips
+    function sparkleChip(el, text) {
+      if (typeof confetti === 'function') {
+        const rect = el.getBoundingClientRect();
+        confetti({
+          particleCount: 15,
+          spread: 40,
+          origin: {
+            x: (rect.left + rect.width / 2) / window.innerWidth,
+            y: (rect.top + rect.height / 2) / window.innerHeight
+          },
+          colors: ['#FFD100', '#FF7300']
+        });
+      }
+    }
+
+    // Mood Selector Logic
+    function selectMood(type) {
+      const box = document.getElementById('mood-result-box');
+      const icon = document.getElementById('mood-icon');
+      const label = document.getElementById('mood-label');
+      const drink = document.getElementById('mood-drink');
+      const addBtn = document.getElementById('mood-add-btn');
+
+      box.classList.remove('hidden');
+
+      let drinkName = "Ngokop Kopi Susu";
+      let drinkPrice = 12000;
+      let drinkCategory = "Latte Series";
+
+      if (type === 'deadline') {
+        icon.textContent = "⚡";
+        label.textContent = "Biar Melek & Nembus Deadline:";
+        drink.textContent = "Ngokop Americano (Rp 10.000)";
+        drinkName = "Ngokop Americano";
+        drinkPrice = 10000;
+      } else if (type === 'meeting') {
+        icon.textContent = "🍯";
+        label.textContent = "Penyelamat Mood Meeting Dadakan:";
+        drink.textContent = "Ngokop Karamel (Rp 14.000)";
+        drinkName = "Ngokop Karamel";
+        drinkPrice = 14000;
+      } else if (type === 'panas') {
+        icon.textContent = "🍋";
+        label.textContent = "Seger Dingin Pelepas Dahaga:";
+        drink.textContent = "Ngokop Teh Sejuk (Rp 10.000)";
+        drinkName = "Ngokop Teh Sejuk";
+        drinkPrice = 10000;
+        drinkCategory = "Tea Series";
+      } else if (type === 'mumet') {
+        icon.textContent = "🍫";
+        label.textContent = "Peredam Emosi & Otak Ngebul:";
+        drink.textContent = "Ngokop Choco (Rp 14.000)";
+        drinkName = "Ngokop Choco";
+        drinkPrice = 14000;
+        drinkCategory = "Tea Series";
+      }
+
+      addBtn.onclick = () => {
+        addToCart(drinkName, drinkPrice, drinkCategory);
+      };
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 25,
+          spread: 50,
+          origin: { y: 0.6 },
+          colors: ['#FFD100', '#FF7300']
+        });
+      }
+    }
+
     document.getElementById('cart-modal').addEventListener('click', (e) => {
       if (e.target.id === 'cart-modal') {
         toggleCartDrawer();
       }
     });
 
-    // Next-Level Framer Motion Style GSAP ScrollTriggers
+    // GSAP ScrollTrigger & Draggable Init
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       updateCartUI();
+      updateLiveOperatingStatus();
+      setInterval(updateLiveOperatingStatus, 60000);
 
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
+      if (typeof gsap !== 'undefined') {
+        // Register plugins
+        if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+        if (typeof Draggable !== 'undefined') {
+          gsap.registerPlugin(Draggable);
+          // Enable Draggable on playful stickers
+          Draggable.create("#drag-tag-1, #drag-tag-2", {
+            type: "x,y",
+            edgeResistance: 0.65,
+            bounds: ".gsap-hero",
+            inertia: true
+          });
+        }
 
-        // 1. Hero entrance spring
+        // Hero Stagger Entrance
         gsap.from(".gsap-hero", {
           duration: 1,
-          y: 50,
+          y: 40,
           opacity: 0,
           ease: "power3.out"
         });
 
-        // 2. Section headers
+        // Section Headers
         gsap.utils.toArray(".gsap-header").forEach(header => {
           gsap.from(header, {
             scrollTrigger: {
               trigger: header,
-              start: "top 85%",
+              start: "top 88%",
               toggleActions: "play none none none"
             },
-            duration: 0.8,
-            y: 35,
+            duration: 0.7,
+            y: 30,
             opacity: 0,
             ease: "power3.out"
           });
         });
 
-        // 3. Product Cards Staggered Spring Reveal
+        // Cards Stagger
         gsap.utils.toArray(".gsap-card").forEach(card => {
           gsap.from(card, {
             scrollTrigger: {
               trigger: card,
-              start: "top 88%",
+              start: "top 90%",
               toggleActions: "play none none none"
             },
-            duration: 0.7,
-            y: 40,
-            scale: 0.95,
+            duration: 0.65,
+            y: 35,
+            scale: 0.96,
             opacity: 0,
-            ease: "back.out(1.4)"
+            ease: "back.out(1.3)"
           });
         });
 
-        // 4. Quote and Footer
+        // Quote & Footer
         gsap.from(".gsap-quote", {
           scrollTrigger: {
             trigger: ".gsap-quote",
-            start: "top 85%"
+            start: "top 88%"
           },
           duration: 0.8,
-          scale: 0.92,
+          scale: 0.94,
           opacity: 0,
           ease: "power2.out"
         });
@@ -1028,10 +1234,10 @@
         gsap.from(".gsap-footer", {
           scrollTrigger: {
             trigger: ".gsap-footer",
-            start: "top 88%"
+            start: "top 90%"
           },
-          duration: 0.9,
-          y: 40,
+          duration: 0.8,
+          y: 30,
           opacity: 0,
           ease: "power3.out"
         });
