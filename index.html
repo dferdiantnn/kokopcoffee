@@ -118,21 +118,6 @@
       box-shadow: 1px 1px 0px #121212 !important;
     }
 
-    /* Ultra-Smooth 1:1 Touch Following Sticker */
-    .touch-sticker {
-      position: absolute;
-      touch-action: none;
-      user-select: none;
-      cursor: grab;
-      z-index: 35;
-      transform: translate3d(0,0,0);
-      will-change: transform;
-    }
-    .touch-sticker:active {
-      cursor: grabbing;
-      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.35));
-    }
-
     .card-interactive {
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       transform-style: preserve-3d;
@@ -189,7 +174,7 @@
     </div>
   </aside>
 
-  <!-- NAVBAR (New Clean Zoomed Logo & Unified Font Style for KOKOP COFFEE) -->
+  <!-- NAVBAR (Clean Zoomed Logo & Unified Font Style for KOKOP COFFEE) -->
   <header class="sticky top-0 z-40 bg-[#FFD100] border-b-3 border-brand-dark px-3 sm:px-4 py-2 sm:py-2.5 shadow-[0_4px_0_0_#121212]">
     <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
       
@@ -235,28 +220,24 @@
     <section class="gsap-hero relative overflow-hidden bg-brand-yellow border-3 border-brand-dark rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#121212]">
       <div class="absolute inset-0 shipping-container-texture opacity-25 pointer-events-none"></div>
 
-      <!-- SMOOTH TOUCH-DRAGGABLE OFFICIAL CUP-TIE STICKER (Follows Finger Exactly) -->
-      <div id="drag-cup-sticker" class="touch-sticker top-3 right-3 sm:top-5 sm:right-6">
-        <div class="bg-brand-yellow border-3 border-brand-dark rounded-2xl p-2 sm:p-2.5 shadow-[4px_4px_0_0_#121212] flex items-center gap-2 rotate-[-4deg] hover:rotate-0 transition-transform">
-          <!-- Official Cup Tie Cutout Image -->
-          <div class="w-9 h-11 sm:w-10 sm:h-12 bg-white border-2 border-brand-dark rounded-xl p-1 flex items-center justify-center overflow-hidden shadow-inner">
-            <img src="assets/images/cup_tie_sticker.png" alt="Kokop Cup Tie Sticker" class="w-full h-full object-contain" />
-          </div>
-          <div class="flex flex-col pr-1">
-            <span class="font-heading font-black text-xs sm:text-sm text-brand-dark leading-none">GESER GUA!</span>
-            <span class="font-mono text-[9px] text-brand-dark/80 font-extrabold leading-none mt-1"><i class="fa-solid fa-hand-pointer text-brand-orange"></i> Cup Kokop</span>
-          </div>
+      <!-- Corner Header Tags (Clean & High Contrast) -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="sticker-badge bg-white text-brand-dark px-3 py-1 rounded-lg text-xs">
+            <i class="fa-solid fa-bolt text-brand-orange"></i> KOPI KORPORAT & TEH SEGER
+          </span>
+          <span class="font-mono text-xs font-black text-white bg-brand-orange px-2.5 py-0.5 rounded-md border border-brand-dark animate-bounce">
+            #masihbutuhduit
+          </span>
         </div>
-      </div>
 
-      <!-- Corner Header Tags -->
-      <div class="flex flex-wrap items-center gap-2 mb-4 relative z-10">
-        <span class="sticker-badge bg-white text-brand-dark px-3 py-1 rounded-lg text-xs">
-          <i class="fa-solid fa-bolt text-brand-orange"></i> KOPI KORPORAT & TEH SEGER
-        </span>
-        <span class="font-mono text-xs font-black text-white bg-brand-orange px-2.5 py-0.5 rounded-md border border-brand-dark animate-bounce">
-          #masihbutuhduit
-        </span>
+        <!-- Official Mini Cup Tie Box in Header Corner (Clean & Solid) -->
+        <div class="hidden sm:flex items-center gap-2 bg-brand-dark text-white px-2.5 py-1 rounded-xl border-2 border-white shadow-brutal-sm">
+          <div class="w-5 h-6 bg-white rounded p-0.5 flex items-center justify-center">
+            <img src="assets/images/cup_tie_sticker.png" alt="Kokop Cup Tie" class="w-full h-full object-contain" />
+          </div>
+          <span class="font-mono text-[10px] font-extrabold text-brand-yellow uppercase tracking-wider">KOKOP ORIGINAL</span>
+        </div>
       </div>
 
       <div class="grid md:grid-cols-12 gap-6 items-center relative z-10">
@@ -329,7 +310,7 @@
         <div class="md:col-span-5 relative flex justify-center mt-2 md:mt-0">
           <div class="relative w-full max-w-[280px] sm:max-w-[320px] card-interactive">
             
-            <!-- Floating Sticker #2 -->
+            <!-- Badge -->
             <div class="absolute -top-3 -right-2 z-20 bg-brand-dark text-brand-yellow font-heading font-black text-xs px-3 py-1 rounded-full border-2 border-white shadow-lg rotate-12 flex items-center gap-1.5 pointer-events-none">
               <i class="fa-solid fa-star text-brand-yellow"></i> FRESH BREW
             </div>
@@ -991,7 +972,7 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & 1:1 DIRECT TOUCH TRACKING -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let cart = [];
     const WA_PHONE = "6285714294461";
@@ -1232,53 +1213,6 @@
       }
     }
 
-    // Direct 1:1 Smooth Drag Tracker
-    function initDirectTouchTracker() {
-      const sticker = document.getElementById('drag-cup-sticker');
-      if (!sticker) return;
-
-      let isDragging = false;
-      let startX = 0, startY = 0;
-      let currentTranslateX = 0, currentTranslateY = 0;
-      let prevTranslateX = 0, prevTranslateY = 0;
-
-      function onPointerDown(e) {
-        isDragging = true;
-        startX = e.clientX || (e.touches && e.touches[0].clientX);
-        startY = e.clientY || (e.touches && e.touches[0].clientY);
-        sticker.style.transition = 'none';
-      }
-
-      function onPointerMove(e) {
-        if (!isDragging) return;
-        const x = e.clientX || (e.touches && e.touches[0].clientX);
-        const y = e.clientY || (e.touches && e.touches[0].clientY);
-        const deltaX = x - startX;
-        const deltaY = y - startY;
-
-        currentTranslateX = prevTranslateX + deltaX;
-        currentTranslateY = prevTranslateY + deltaY;
-
-        sticker.style.transform = `translate3d(${currentTranslateX}px, ${currentTranslateY}px, 0)`;
-      }
-
-      function onPointerUp() {
-        if (!isDragging) return;
-        isDragging = false;
-        prevTranslateX = currentTranslateX;
-        prevTranslateY = currentTranslateY;
-        sticker.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-      }
-
-      sticker.addEventListener('mousedown', onPointerDown);
-      window.addEventListener('mousemove', onPointerMove);
-      window.addEventListener('mouseup', onPointerUp);
-
-      sticker.addEventListener('touchstart', onPointerDown, { passive: true });
-      window.addEventListener('touchmove', onPointerMove, { passive: true });
-      window.addEventListener('touchend', onPointerUp);
-    }
-
     document.getElementById('cart-modal').addEventListener('click', (e) => {
       if (e.target.id === 'cart-modal') {
         toggleCartDrawer();
@@ -1289,7 +1223,6 @@
       updateCartUI();
       updateLiveOperatingStatus();
       setInterval(updateLiveOperatingStatus, 60000);
-      initDirectTouchTracker();
 
       if (typeof gsap !== 'undefined') {
         if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
