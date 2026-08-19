@@ -820,6 +820,91 @@
       </div>
     </section>
 
+    <!-- ========================================================================= -->
+    <!-- 3.5. KOKOP 2048 STREET MINI-GAME -->
+    <!-- ========================================================================= -->
+    <section id="game-zone" class="gsap-card bg-[#18181A] border-3 border-brand-yellow rounded-3xl p-5 sm:p-7 shadow-[6px_6px_0px_0px_#FFD100] text-white relative overflow-hidden scroll-mt-24">
+      <div class="absolute inset-0 shipping-container-texture opacity-15 pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-4">
+        <!-- Game Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-gray-800 pb-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="sticker-badge bg-brand-orange text-white text-xs px-2.5 py-0.5 rounded">
+                <i class="fa-solid fa-gamepad"></i> MINI ARCADE
+              </span>
+              <span class="font-mono text-xs font-black text-brand-dark bg-brand-yellow px-2 py-0.5 rounded border border-brand-dark animate-pulse">
+                Sambil Nunggu Gas Main! 🕹️
+              </span>
+            </div>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight flex items-center gap-2">
+              KOKOP 2048: <span class="text-brand-yellow">Kocok Angka</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-400">
+              Geser dan gabungin angka kopi sampai tembus **2048**! Cocok buat ngisi waktu sambil nunggu pesanan lo diseduh barista.
+            </p>
+          </div>
+
+          <!-- Score & Restart Controls -->
+          <div class="flex items-center gap-2.5">
+            <div class="bg-[#242428] border-2 border-brand-yellow rounded-2xl px-3.5 py-1.5 text-center min-w-[75px] shadow-sm">
+              <span class="font-mono text-[9px] text-gray-400 font-bold block uppercase leading-none">SKOR</span>
+              <span id="game-score" class="font-heading font-black text-lg text-brand-yellow leading-tight">0</span>
+            </div>
+            <div class="bg-[#242428] border-2 border-gray-700 rounded-2xl px-3.5 py-1.5 text-center min-w-[75px] shadow-sm">
+              <span class="font-mono text-[9px] text-gray-400 font-bold block uppercase leading-none">TERBAIK</span>
+              <span id="game-best" class="font-heading font-black text-lg text-white leading-tight">0</span>
+            </div>
+            <button onclick="restart2048()" class="btn-spring bg-brand-orange hover:bg-brand-orangeHover text-white p-2.5 rounded-2xl border-2 border-brand-dark shadow-brutal-sm flex items-center justify-center text-sm" title="Ulangi Game">
+              <i class="fa-solid fa-rotate-right font-black"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="flex flex-col items-center justify-center py-2">
+          
+          <div class="relative touch-none select-none">
+            <!-- 4x4 Grid Container (Yellow/Dark Neo-Brutalist Theme) -->
+            <div id="game-grid-container" class="w-[280px] h-[280px] xs:w-[320px] xs:h-[320px] sm:w-[340px] sm:h-[340px] bg-[#121212] border-3 border-brand-dark rounded-2xl p-2.5 grid grid-cols-4 gap-2 shadow-[4px_4px_0_0_#FFD100]">
+              <!-- Grid Tiles generated dynamically by JavaScript -->
+            </div>
+
+            <!-- Game Over / Victory Overlay -->
+            <div id="game-overlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-4 text-center border-2 border-brand-orange hidden z-20">
+              <div class="w-12 h-12 rounded-2xl bg-brand-yellow text-brand-dark flex items-center justify-center text-2xl mb-2 shadow-brutal-sm">
+                <i id="game-overlay-icon" class="fa-solid fa-mug-hot"></i>
+              </div>
+              <h3 id="game-overlay-title" class="font-heading font-black text-2xl text-white">GAME OVER!</h3>
+              <p id="game-overlay-desc" class="text-xs font-sans text-gray-300 mb-4">Otak butuh kafein tambahan nih!</p>
+              <button onclick="restart2048()" class="btn-spring bg-brand-yellow hover:bg-brand-yellowLight text-brand-dark font-heading font-black text-xs px-5 py-2.5 rounded-xl border border-brand-dark shadow-brutal-sm flex items-center gap-2">
+                <i class="fa-solid fa-play"></i>
+                <span>Main Lagi</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile Swipe Hint / D-Pad Buttons -->
+          <div class="mt-3 flex flex-col items-center gap-2 text-center">
+            <p class="font-mono text-[11px] text-gray-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-hand-pointer text-brand-yellow"></i>
+              <span>Geser / Swipe di layar atau gunakan tombol panah:</span>
+            </p>
+            <div class="flex items-center gap-2">
+              <button onclick="handleDpadMove(0)" class="btn-spring w-9 h-9 rounded-xl bg-[#242428] hover:bg-brand-orange text-white border border-gray-700 font-bold flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-up"></i></button>
+            </div>
+            <div class="flex items-center gap-2 -mt-1">
+              <button onclick="handleDpadMove(3)" class="btn-spring w-9 h-9 rounded-xl bg-[#242428] hover:bg-brand-orange text-white border border-gray-700 font-bold flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-left"></i></button>
+              <button onclick="handleDpadMove(2)" class="btn-spring w-9 h-9 rounded-xl bg-[#242428] hover:bg-brand-orange text-white border border-gray-700 font-bold flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-down"></i></button>
+              <button onclick="handleDpadMove(1)" class="btn-spring w-9 h-9 rounded-xl bg-[#242428] hover:bg-brand-orange text-white border border-gray-700 font-bold flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- TESTIMONIAL / VIBE STRIP -->
     <section class="gsap-quote bg-white rounded-3xl border-3 border-brand-dark p-6 shadow-[5px_5px_0px_0px_#FFD100] relative overflow-hidden flex flex-col sm:flex-row items-center gap-5">
       <div class="w-16 h-16 rounded-2xl bg-brand-yellow border-2 border-brand-dark flex items-center justify-center text-3xl shrink-0 shadow-brutal-sm animate-float">
@@ -1191,6 +1276,216 @@
       window.open(encodedUrl, '_blank');
     }
 
+    /* ========================================================================= */
+    /* KOKOP 2048 GAME ENGINE (Neo-Brutalist Theme & Swipe Engine)               */
+    /* ========================================================================= */
+    const GRID_SIZE = 4;
+    let grid = [];
+    let gameScore = 0;
+    let gameBest = localStorage.getItem('kokop_2048_best') ? parseInt(localStorage.getItem('kokop_2048_best')) : 0;
+    let isGameOver = false;
+
+    const TILE_STYLES = {
+      2:    { bg: 'bg-[#2A2A2E]', text: 'text-[#FFE34D]', border: 'border-gray-700', label: '2' },
+      4:    { bg: 'bg-[#35353A]', text: 'text-[#FFD100]', border: 'border-brand-yellow/50', label: '4' },
+      8:    { bg: 'bg-[#FF7300]', text: 'text-white', border: 'border-brand-dark', label: '8' },
+      16:   { bg: 'bg-[#E06200]', text: 'text-white', border: 'border-brand-dark', label: '16' },
+      32:   { bg: 'bg-[#FFD100]', text: 'text-[#121212]', border: 'border-brand-dark font-black', label: '32' },
+      64:   { bg: 'bg-[#FFE34D]', text: 'text-[#121212]', border: 'border-brand-dark font-black', label: '64' },
+      128:  { bg: 'bg-[#F97316]', text: 'text-white font-black text-xl shadow-brutal-sm', border: 'border-white', label: '128' },
+      256:  { bg: 'bg-[#EA580C]', text: 'text-white font-black text-xl shadow-brutal-sm', border: 'border-white', label: '256' },
+      512:  { bg: 'bg-[#E11D48]', text: 'text-white font-black text-2xl shadow-brutal-sm', border: 'border-brand-yellow', label: '512' },
+      1024: { bg: 'bg-[#10B981]', text: 'text-white font-black text-2xl shadow-brutal-sm', border: 'border-brand-yellow', label: '1024' },
+      2048: { bg: 'bg-gradient-to-br from-brand-yellow to-brand-orange', text: 'text-[#121212] font-black text-3xl shadow-brutal', border: 'border-white animate-bounce', label: '2048' }
+    };
+
+    function init2048() {
+      const bestEl = document.getElementById('game-best');
+      if (bestEl) bestEl.textContent = gameBest;
+      restart2048();
+      setupGameInput();
+    }
+
+    function restart2048() {
+      grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
+      gameScore = 0;
+      isGameOver = false;
+      document.getElementById('game-score').textContent = '0';
+      document.getElementById('game-overlay').classList.add('hidden');
+      
+      addRandomTile();
+      addRandomTile();
+      render2048Grid();
+    }
+
+    function addRandomTile() {
+      const emptyCells = [];
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          if (grid[r][c] === 0) emptyCells.push({ r, c });
+        }
+      }
+      if (emptyCells.length > 0) {
+        const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        grid[randomCell.r][randomCell.c] = Math.random() < 0.9 ? 2 : 4;
+      }
+    }
+
+    function render2048Grid() {
+      const container = document.getElementById('game-grid-container');
+      if (!container) return;
+
+      container.innerHTML = '';
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const val = grid[r][c];
+          const cell = document.createElement('div');
+          
+          if (val === 0) {
+            cell.className = 'w-full h-full rounded-xl bg-[#1C1C1E] border border-gray-800 flex items-center justify-center';
+          } else {
+            const style = TILE_STYLES[val] || { bg: 'bg-brand-orange', text: 'text-white', border: 'border-white', label: val };
+            cell.className = `w-full h-full rounded-xl ${style.bg} ${style.text} border-2 ${style.border} flex items-center justify-center font-heading font-black text-lg sm:text-2xl transition-all duration-150 transform scale-100 shadow-sm`;
+            cell.textContent = val;
+          }
+          container.appendChild(cell);
+        }
+      }
+    }
+
+    function slide(row) {
+      let arr = row.filter(val => val !== 0);
+      for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] === arr[i + 1]) {
+          arr[i] *= 2;
+          gameScore += arr[i];
+          arr[i + 1] = 0;
+
+          if (arr[i] === 2048 && typeof confetti === 'function') {
+            confetti({ particleCount: 60, spread: 80, origin: { y: 0.5 }, colors: ['#FFD100', '#FF7300'] });
+          }
+        }
+      }
+      arr = arr.filter(val => val !== 0);
+      while (arr.length < GRID_SIZE) {
+        arr.push(0);
+      }
+      return arr;
+    }
+
+    function rotateLeft(matrix) {
+      const res = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          res[GRID_SIZE - 1 - c][r] = matrix[r][c];
+        }
+      }
+      return res;
+    }
+
+    function rotateRight(matrix) {
+      const res = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          res[c][GRID_SIZE - 1 - r] = matrix[r][c];
+        }
+      }
+      return res;
+    }
+
+    function move(direction) {
+      if (isGameOver) return;
+      const prevGrid = JSON.stringify(grid);
+
+      if (direction === 3) { // Left
+        grid = grid.map(row => slide(row));
+      } else if (direction === 1) { // Right
+        grid = grid.map(row => slide(row.reverse()).reverse());
+      } else if (direction === 0) { // Up
+        grid = rotateLeft(grid);
+        grid = grid.map(row => slide(row));
+        grid = rotateRight(grid);
+      } else if (direction === 2) { // Down
+        grid = rotateRight(grid);
+        grid = grid.map(row => slide(row));
+        grid = rotateLeft(grid);
+      }
+
+      if (JSON.stringify(grid) !== prevGrid) {
+        addRandomTile();
+        render2048Grid();
+        updateGameScore();
+        checkGameOver();
+      }
+    }
+
+    function updateGameScore() {
+      document.getElementById('game-score').textContent = gameScore;
+      if (gameScore > gameBest) {
+        gameBest = gameScore;
+        localStorage.setItem('kokop_2048_best', gameBest);
+        document.getElementById('game-best').textContent = gameBest;
+      }
+    }
+
+    function checkGameOver() {
+      // Check for empty space
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          if (grid[r][c] === 0) return;
+          if (r < GRID_SIZE - 1 && grid[r][c] === grid[r + 1][c]) return;
+          if (c < GRID_SIZE - 1 && grid[r][c] === grid[r][c + 1]) return;
+        }
+      }
+
+      // If no moves left
+      isGameOver = true;
+      const overlay = document.getElementById('game-overlay');
+      overlay.classList.remove('hidden');
+    }
+
+    function handleDpadMove(dir) {
+      move(dir);
+    }
+
+    function setupGameInput() {
+      // Keyboard Controls
+      window.addEventListener('keydown', (e) => {
+        if (["ArrowUp", "KeyW"].includes(e.code)) { e.preventDefault(); move(0); }
+        else if (["ArrowRight", "KeyD"].includes(e.code)) { e.preventDefault(); move(1); }
+        else if (["ArrowDown", "KeyS"].includes(e.code)) { e.preventDefault(); move(2); }
+        else if (["ArrowLeft", "KeyA"].includes(e.code)) { e.preventDefault(); move(3); }
+      });
+
+      // Mobile Touch Swipe Handling
+      const board = document.getElementById('game-grid-container');
+      if (!board) return;
+
+      let touchStartX = 0, touchStartY = 0;
+      board.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      board.addEventListener('touchend', (e) => {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+        const minSwipeDistance = 30;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (Math.abs(deltaX) > minSwipeDistance) {
+            if (deltaX > 0) move(1); // Right
+            else move(3); // Left
+          }
+        } else {
+          if (Math.abs(deltaY) > minSwipeDistance) {
+            if (deltaY > 0) move(2); // Down
+            else move(0); // Up
+          }
+        }
+      }, { passive: true });
+    }
+
     function selectMood(type) {
       const box = document.getElementById('mood-result-box');
       const icon = document.getElementById('mood-icon');
@@ -1304,6 +1599,7 @@
       updateLiveOperatingStatus();
       setInterval(updateLiveOperatingStatus, 60000);
       initDirectTouchTracker();
+      init2048();
 
       if (typeof gsap !== 'undefined') {
         if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
